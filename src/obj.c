@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "obj.h"
 #include "simple_logger.h"
 

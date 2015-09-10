@@ -3,13 +3,13 @@
 
 #define __obj_max 1024
 
-static Obj ObjList[__obj_max];
+static Obj ObjList[__obj_max]; //static-this file is global to only obj.c
 
-static void obj_close();
+static void obj_close(); //cannot call outside this file
 
 void obj_init()
 {
-    memset(ObjList,0,sizeof(Obj)*__obj_max);
+    memset(ObjList,0,sizeof(Obj)*__obj_max); //set static array 0
     atexit(obj_close);
 }
 
@@ -22,22 +22,22 @@ Obj *obj_new()
         {
             memset(&ObjList[i],0,sizeof(Obj));
             ObjList[i].used = 1;
-            return &ObjList[i];
+            return &ObjList[i]; //return pointer
         }
     }
-    return NULL;
+    return NULL; //no more object data
 }
 
 Obj *obj_get_by_filename(char *filename)
 {
     int i;
-    for (i = 0; i < __obj_max; i++)
+    for (i = 0; i < __obj_max; i++) //search list
     {
         if ((ObjList[i].used != 0) &&
             (strcmp(ObjList[i].filename,filename) == 0))
         {
-            memset(&ObjList[i],0,sizeof(Obj));
-            ObjList[i].used = 1;
+            //memset(&ObjList[i],0,sizeof(Obj));
+            //ObjList[i].used = 1;
             return &ObjList[i];
         }
     }
@@ -46,11 +46,11 @@ Obj *obj_get_by_filename(char *filename)
 
 static void obj_delete(Obj *obj)
 {
-    if (!obj)return;
+    if (!obj)return; //
     
-    if (obj->vertex_array)
+    if (obj->vertex_array) //if there is data
     {
-        free(obj->vertex_array);
+        free(obj->vertex_array); //free data
     }
     if (obj->texel_array)
     {
@@ -69,7 +69,7 @@ static void obj_delete(Obj *obj)
 
 void obj_free(Obj *obj)
 {
-    if (!obj)return;
+    if (!obj)return; //check for NULL
     obj->used--;
     if (obj->used > 0)return;
     obj_delete(obj);
@@ -144,7 +144,7 @@ void obj_allocate(Obj *model)
     if (model->num_vertices)
     {
         model->vertex_array = malloc(sizeof(float)*3*model->num_vertices);
-        if (model->vertex_array)
+        if (model->vertex_array) //if vertex exists
         {
             memset(model->vertex_array,0,sizeof(float)*3*model->num_vertices);
         }
@@ -193,19 +193,19 @@ void obj_file_parse(Obj * model, FILE* file)
     {
         return;
     }
-    rewind(file);
+    rewind(file); //go back to beginning of file
     while(fscanf(file, "%s", buf) != EOF)
     {
         switch(buf[0])
         {
-            case 'v':
+            case 'v':  //if vertex
                 switch(buf[1])
                 {
-                    case '\0':
+                    case '\0': //has nothing
                         fscanf(
                             file,
-                            "%f %f %f",
-                            &x,
+                            "%f %f %f", //give three floats and save in x,y,z
+                            &x, //address of variable
                             &y,
                             &z
                         );

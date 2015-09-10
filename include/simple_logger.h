@@ -33,7 +33,7 @@ void init_logger(const char *log_file_path);
   @param msg a string with tokens
   @param ... variables to be put into the tokens.
 */
-#define slog(...) _slog(__FILE__,__LINE__,__VA_ARGS__)
+#define slog(...) _slog(__FILE__,__LINE__,__VA_ARGS__) //output
 void _slog(char *f,int l,char *msg,...);
 
 

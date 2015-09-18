@@ -24,8 +24,11 @@
 #include "obj.h"
 #include "vector.h"
 #include "sprite.h"
-
+#include "entity.h"
+#include <math.h>
 void set_camera(Vec3D position, Vec3D rotation);
+void spawncube(Vec3D position);
+
 
 int main(int argc, char *argv[])
 {
@@ -55,6 +58,7 @@ int main(int argc, char *argv[])
     }
     model_init();
     obj_init();
+	initEntities();
     
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao); //make our vertex array object, we need it to restore state we set after binding it. Re-binding reloads the state associated with it.
@@ -72,7 +76,10 @@ int main(int argc, char *argv[])
     
 //    obj = obj_load("models/mountainvillage.obj");
     
-    
+    spawncube(vec3d(0,5,0));  //spawn cube in game
+	spawncube(vec3d(3,5,0));
+	spawncube(vec3d(0,10,0));
+
     while (bGameLoopRunning)
     {
         while ( SDL_PollEvent(&e) ) 
@@ -155,6 +162,7 @@ int main(int argc, char *argv[])
                 {
                     cameraRotation.x -= 1;
                 }
+
             }
         }
 
@@ -164,7 +172,9 @@ int main(int argc, char *argv[])
         set_camera(
             cameraPosition,
             cameraRotation);
-        
+
+        drawEntities();  //get draw data
+		updateEntities(); //update entity for every loop
   
         obj_draw(
             bgobj,
@@ -200,5 +210,20 @@ void set_camera(Vec3D position, Vec3D rotation)
                  -position.y,
                  -position.z);
 }
+
+void spawncube(Vec3D position) //spawn cube function
+{
+	Entity *ent;  //new entity pointer with variable Entity
+	ent = newEntity(); //ent gets newEntity function data
+
+	if(ent != NULL)   //if there is an entity
+	{
+		ent->position=position;                     //entity is pointing to position
+		ent->model=obj_load("models/cube.obj");;    //entity is pointing to object cube
+		ent->sprite= LoadSprite("models/cube_text.png",1024,1024);;  //entity is pointing to sprite texture
+	}
+}
+
+
 
 /*eol@eof*/

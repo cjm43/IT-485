@@ -1,9 +1,12 @@
 #include <stdio.h>//standard input/output
 #include "entity.h"
 #include <math.h>
+#include "Collision.h"
+#include "simple_logger.h"
 #define MAX_ENTITY 1000
 
-Entity entitylist[MAX_ENTITY];
+Entity entitylist[MAX_ENTITY]; //array of entites set to max number of entities
+
 
 Entity *newEntity()
 {
@@ -40,6 +43,7 @@ void initEntities() //initialize entity
 void drawEntities() // draw each entity's obj
 {
 	int i;
+
 	for(i=0; i < MAX_ENTITY; i++)
 	{
 		if(entitylist[i].refcount!=0)//if entitylist refcount is not 0, entity is in use
@@ -53,8 +57,16 @@ void drawEntities() // draw each entity's obj
 		}
 	}
 }
+
+
 void updateEntities()  // add the entity velocity to position and check for collision
 {
+			/*glPushMatrix();
+
+			glRotatef(rotation.x, 1.0f, 0.0f, 0.0f);
+			glRotatef(rotation.y, 0.0f, 1.0f, 0.0f);
+			glRotatef(rotation.z, 0.0f, 0.0f, 1.0f);
+
+			glPopMatrix();*/
 	
- 
 }

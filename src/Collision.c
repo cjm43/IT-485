@@ -1,5 +1,6 @@
 #include "Collision.h"
 #include "math.h"
+#include "simple_logger.h"
 
 int sphere_sphere_intersection(
     Vec3D c1,float r1,   /*sphere 1*/
@@ -84,6 +85,20 @@ int sphere_cube_intersection(
         return 1;
     }
     return 0;
+}
+
+int cube_cube_intersection(  //two cubes colliding
+	Cube a,
+	Cube b,
+{
+	if((a.x > b.x + b.w) || (b.x > a.x + a.w) ||
+	   (a.y > b.y + b.w) || (b.y > a.y + a.w) ||
+	   (a.z > b.z + b.w) || (b.z > a.z + a.w))
+	{
+		return 1;  //cubes collided
+	}
+	return 0; //cubes are not colliding
+
 }
 
 /*eol@eof*/

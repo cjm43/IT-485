@@ -76,8 +76,12 @@ int main(int argc, char *argv[])
     
 //    obj = obj_load("models/mountainvillage.obj");
     
-    spawncube(vec3d(0,5,0));  //spawn cube in game
-	spawncube(vec3d(3,5,0));
+    /*spawn cube in game*/
+    spawncube(vec3d(0,5,0) //position
+			 ); 
+	spawncube(vec3d(3,5,0),
+			  vec3d(90,r++,0)
+		     );
 	spawncube(vec3d(0,10,0));
 
     while (bGameLoopRunning)
@@ -175,21 +179,26 @@ int main(int argc, char *argv[])
 
         drawEntities();  //get draw data
 		updateEntities(); //update entity for every loop
+
+		spawncube(  //rotate cube
+			 vec3d(3,5,0),
+			 vec3d(90,r++,0)
+		   );
   
         obj_draw(
             bgobj,
             vec3d(0,0,2),
-            vec3d(90,90,0),
+            vec3d(90,r++,0), //rotate ground
             vec3d(5,5,5),
             vec4d(1,1,1,1),
             bgtext
         );
         
-        obj_draw(
+        obj_draw(  //create cube
             obj,
-            vec3d(0,0,0),
-            vec3d(90,r++,0),
-            vec3d(0.5,0.5,0.5),
+            vec3d(0,0,0), //position
+            vec3d(0,r++,0), //rotation indefinitely
+            vec3d(0.5,0.5,0.5), //scale
             vec4d(1,1,1,1),
             texture
         );
@@ -211,7 +220,7 @@ void set_camera(Vec3D position, Vec3D rotation)
                  -position.z);
 }
 
-void spawncube(Vec3D position) //spawn cube function
+void spawncube(Vec3D position, Vec3D rotation) //spawn cube function
 {
 	Entity *ent;  //new entity pointer with variable Entity
 	ent = newEntity(); //ent gets newEntity function data
@@ -219,6 +228,7 @@ void spawncube(Vec3D position) //spawn cube function
 	if(ent != NULL)   //if there is an entity
 	{
 		ent->position=position;                     //entity is pointing to position
+		ent->rotation=rotation;                     //entity points to rotation
 		ent->model=obj_load("models/cube.obj");;    //entity is pointing to object cube
 		ent->sprite= LoadSprite("models/cube_text.png",1024,1024);;  //entity is pointing to sprite texture
 	}

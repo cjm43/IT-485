@@ -89,7 +89,7 @@ int sphere_cube_intersection(
 
 int cube_cube_intersection(  //two cubes colliding
 	Cube a,
-	Cube b,
+	Cube b)
 {
 	if((a.x > b.x + b.w) || (b.x > a.x + a.w) ||
 	   (a.y > b.y + b.w) || (b.y > a.y + a.w) ||

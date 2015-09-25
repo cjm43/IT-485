@@ -9,4 +9,8 @@ typedef struct
     float w,h,d;
 }Cube;
 
+int cube_cube_intersection(
+	Cube a,
+	Cube b);
+
 #endif

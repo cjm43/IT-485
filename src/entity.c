@@ -50,7 +50,7 @@ void drawEntities() // draw each entity's obj
 		{
 			obj_draw(entitylist[i].model,  //create data about object
 					 entitylist[i].position,
-					 vec3d(0,0,0) , //rotate
+					 entitylist[i].rotation , //rotate
 					 vec3d(1,1,1), //scale
 					 vec4d(1,1,1,1), //color
 					 entitylist[i].sprite);
@@ -61,12 +61,13 @@ void drawEntities() // draw each entity's obj
 
 void updateEntities()  // add the entity velocity to position and check for collision
 {
-			/*glPushMatrix();
-
-			glRotatef(rotation.x, 1.0f, 0.0f, 0.0f);
-			glRotatef(rotation.y, 0.0f, 1.0f, 0.0f);
-			glRotatef(rotation.z, 0.0f, 0.0f, 1.0f);
-
-			glPopMatrix();*/
+	int i;
+	for(i=0; i < MAX_ENTITY; i++)
+	{
+		if(entitylist[i].refcount!=0)//if entitylist refcount is not 0, entity is in use
+		{
+			entitylist[i].rotation.x = entitylist[i].rotation.x+1;
+		}
+	}
 	
 }

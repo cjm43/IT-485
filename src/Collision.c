@@ -87,18 +87,17 @@ int sphere_cube_intersection(
     return 0;
 }
 
-int cube_cube_intersection(  //two cubes colliding
-	Cube a,
-	Cube b)
+int cube_cube_intersection(
+    Cube a,
+    Cube b)
 {
-	if((a.x > b.x + b.w) || (b.x > a.x + a.w) ||
-	   (a.y > b.y + b.w) || (b.y > a.y + a.w) ||
-	   (a.z > b.z + b.w) || (b.z > a.z + a.w))
-	{
-		return 1;  //cubes collided
-	}
-	return 0; //cubes are not colliding
-
+    if ((a.x > b.x + b.w) || (b.x > a.x + a.w) || //if length of a.x is greater than length of b.x plus the width of b
+        (a.y > b.y + b.h) || (b.y > a.y + a.h) ||
+        (a.z > b.z + b.d) || (b.z > a.z + a.d))
+    {
+        return 1;  //intersection
+    }
+    return 0;
 }
 
 /*eol@eof*/

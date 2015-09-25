@@ -20,7 +20,9 @@
     <ClCompile Include="..\src\shader.c" />
     <ClCompile Include="..\src\simple_logger.c" />
     <ClCompile Include="..\src\sprite.c" />
+    <ClCompile Include="..\src\thing.c" />
     <ClCompile Include="..\src\vector.c" />
+    <ClCompile Include="space.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Collision.h" />
@@ -31,7 +33,10 @@
     <ClInclude Include="..\include\shader.h" />
     <ClInclude Include="..\include\simple_logger.h" />
     <ClInclude Include="..\include\sprite.h" />
+    <ClInclude Include="..\include\thing.h" />
     <ClInclude Include="..\include\vector.h" />
+    <ClInclude Include="body.h" />
+    <ClInclude Include="space.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\Makefile" />

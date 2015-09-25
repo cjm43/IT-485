@@ -79,8 +79,8 @@ int main(int argc, char *argv[])
     /*spawn cube in game*/
     spawncube(vec3d(0,5,0) //position
 			 ); 
-	spawncube(vec3d(3,5,0),
-			  vec3d(90,r++,0)
+	spawncube(vec3d(2,5,2)
+			  //vec3d(0,90,0)
 		     );
 	spawncube(vec3d(0,10,0));
 
@@ -180,15 +180,15 @@ int main(int argc, char *argv[])
         drawEntities();  //get draw data
 		updateEntities(); //update entity for every loop
 
-		spawncube(  //rotate cube
-			 vec3d(3,5,0),
-			 vec3d(90,r++,0)
-		   );
+		/*spawncube(  //create cube
+			 vec3d(3,5,0), //position
+			 vec3d(90,r++,0) //rotation
+		   );*/
   
         obj_draw(
             bgobj,
             vec3d(0,0,2),
-            vec3d(90,r++,0), //rotate ground
+            vec3d(90,90,0), //rotate ground
             vec3d(5,5,5),
             vec4d(1,1,1,1),
             bgtext

@@ -1,4 +1,4 @@
-#ifndef __THING_H__
+/*#ifndef __THING_H__
 #define __THING_H__
 
 #include "obj.h"
@@ -10,4 +10,4 @@ typedef struct thing
 	int 
 	int
 	char
-}
+}*/

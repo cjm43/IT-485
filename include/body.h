@@ -2,7 +2,7 @@
 #define __BODY_H__
 
 #include "vector.h"
-#include "collisions.h"
+#include "Collision.h"
 #include "mgl_callback.h"
 
 typedef struct

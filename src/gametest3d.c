@@ -25,8 +25,9 @@
 #include "obj.h"
 #include "vector.h"
 #include "sprite.h"
-#include "entity.h"
+//#include "entity.h"
 #include "space.h"
+#include "object.h"
 
 void set_camera(Vec3D position, Vec3D rotation);
 
@@ -90,7 +91,7 @@ int main(int argc, char *argv[])
     cube1 = newCube(vec3d(0,0,0),"Cubert");
     cube2 = newCube(vec3d(10,0,0),"Hobbes");
     
-    cube2->body.velocity.x = -0.1;
+    cube2->body.velocity.x = 0.1;
     
     space = space_new();
     space_set_steps(space,100);

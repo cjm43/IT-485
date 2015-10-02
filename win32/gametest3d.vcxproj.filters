@@ -45,13 +45,16 @@
     <ClCompile Include="..\src\entity.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\object.c">
+    <ClCompile Include="..\src\mgl_callback.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\space.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\thing.c">
+    <ClCompile Include="..\src\object.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\body.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,19 +86,16 @@
     <ClInclude Include="..\include\entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="body.h">
+    <ClInclude Include="..\include\body.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\mgl_callback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\space.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\object.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\body.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\thing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

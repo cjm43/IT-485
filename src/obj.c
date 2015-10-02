@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-#include <stdlib.h>
-#include <stdio.h>
-=======
 #include <stdio.h>
 #include <stdlib.h>
->>>>>>> ef846310e715bbcd5e3b80f65f044ea6eb8ac795
 #include "obj.h"
 #include "simple_logger.h"
 
@@ -43,11 +38,8 @@ Obj *obj_get_by_filename(char *filename)
         if ((ObjList[i].used != 0) &&
             (strcmp(ObjList[i].filename,filename) == 0))
         {
-<<<<<<< HEAD
             //memset(&ObjList[i],0,sizeof(Obj));
             //ObjList[i].used = 1;
-=======
->>>>>>> ef846310e715bbcd5e3b80f65f044ea6eb8ac795
             return &ObjList[i];
         }
     }

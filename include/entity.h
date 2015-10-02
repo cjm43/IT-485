@@ -21,3 +21,4 @@ void updateEntities();// add the entity velocity to position and check for colli
 
 void newBoxEntity(Vec3D position, Vec3D velocity);
 #endif
+

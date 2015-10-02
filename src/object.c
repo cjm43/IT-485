@@ -1,3 +1,5 @@
+/*create entity*/
+
 #include "object.h"
 #include "simple_logger.h"
 

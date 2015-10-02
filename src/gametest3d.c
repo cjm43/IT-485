@@ -31,17 +31,20 @@
 
 void set_camera(Vec3D position, Vec3D rotation);
 
-void touch_callback(void *data, void *context)
+void touch_callback(void *data, void *context) 
 {
     Entity *me,*other;
+	//Entity *cube2;
     Body *obody;
     if ((!data)||(!context))return;
     me = (Entity *)data;
     obody = (Body *)context;
-    if (entity_is_entity(obody->touch.data))
+    if (entity_is_entity(obody->touch.data)) //if entites are touching
     {
+		/*have cube2 move right*/
         other = (Entity *)obody->touch.data;
         slog("%s is ",other->name);
+		
     }
     slog("touching me.... touching youuuuuuuu");
 }
@@ -91,7 +94,7 @@ int main(int argc, char *argv[])
     cube1 = newCube(vec3d(0,0,0),"Cubert");
     cube2 = newCube(vec3d(10,0,0),"Hobbes");
     
-    cube2->body.velocity.x = 0.1;
+    cube2->body.velocity.x = 0.2; //move cube2 0.1 units left
     
     space = space_new();
     space_set_steps(space,100);

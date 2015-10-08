@@ -95,9 +95,9 @@ int cube_cube_intersection(
         (a.y > b.y + b.h) || (b.y > a.y + a.h) ||
         (a.z > b.z + b.d) || (b.z > a.z + a.d))
     {
-        return 1;  //intersection
+        return 0;  //intersection
     }
-    return 0;
+    return 1;
 }
 
 /*eol@eof*/

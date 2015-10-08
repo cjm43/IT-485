@@ -34,16 +34,18 @@ void set_camera(Vec3D position, Vec3D rotation);
 void touch_callback(void *data, void *context) 
 {
     Entity *me,*other;
-	//Entity *cube2;
     Body *obody;
     if ((!data)||(!context))return;
     me = (Entity *)data;
+	me->body.velocity = vec3d(-me->body.velocity.x,-me->body.velocity.y,-me->body.velocity.z);
     obody = (Body *)context;
     if (entity_is_entity(obody->touch.data)) //if entites are touching
     {
-		/*have cube2 move right*/
+		/*have cube2 move right after touching cube1*/
         other = (Entity *)obody->touch.data;
         slog("%s is ",other->name);
+		other->body.velocity = vec3d(-other->body.velocity.x,-other->body.velocity.y,-other->body.velocity.z); //move cube2 in opposite direction as soon as it collides with cube1
+		
 		
     }
     slog("touching me.... touching youuuuuuuu");
@@ -65,6 +67,7 @@ Entity *newCube(Vec3D position,const char *name)
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
     return ent;
 }
+
 
 int main(int argc, char *argv[])
 {
@@ -91,16 +94,17 @@ int main(int argc, char *argv[])
     bgobj = obj_load("models/mountainvillage.obj");
     bgtext = LoadSprite("models/mountain_text.png",1024,1024);
     
-    cube1 = newCube(vec3d(0,0,0),"Cubert");
-    cube2 = newCube(vec3d(10,0,0),"Hobbes");
+    cube1 = newCube(vec3d(-5,0,0),"Cubert");
+    cube2 = newCube(vec3d(5,0,0),"Hobbes");
     
-    cube2->body.velocity.x = 0.2; //move cube2 0.1 units left
+    cube2->body.velocity.x = -0.1; //move cube2 0.1 units left
     
     space = space_new();
     space_set_steps(space,100);
     
     space_add_body(space,&cube1->body);
     space_add_body(space,&cube2->body);
+    //space_add_body(space,&gun->body);
     while (bGameLoopRunning)
     {
         for (i = 0; i < 100;i++)

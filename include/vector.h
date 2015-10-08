@@ -20,6 +20,7 @@ Vec2D vec2d(float x,float y);
 Vec3D vec3d(float x,float y, float z);
 Vec4D vec4d(float x,float y, float z, float w);
 
+/*Macros*/
 #define vec2d_set(v, a, b)      (v.x=(a), v.y=(b))
 #define vec3d_set(v, a, b, c)   (v.x=(a), v.y=(b), v.z=(c))
 #define vec4d_set(v, a, b, c,d) (v.x=(a), v.y=(b), v.z=(c), v.w=(d))

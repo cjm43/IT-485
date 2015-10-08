@@ -15,6 +15,7 @@ typedef struct Entity_S
     Vec3D acceleration;
     Vec3D rotation;
     Vec3D scale;
+	Vec3D velocity;
     Vec4D color;
     Obj *objModel;
     Sprite *texture;    /**<object texture*/

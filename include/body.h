@@ -8,6 +8,7 @@
 typedef struct
 {
     Vec3D position;
+	Vec3D rotation;
     Vec3D velocity;
     Cube bounds;
     MglCallback touch;

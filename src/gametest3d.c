@@ -28,6 +28,7 @@
 //#include "entity.h"
 #include "space.h"
 #include "object.h"
+#include  "math.h"
 
 void set_camera(Vec3D position, Vec3D rotation);
 
@@ -46,12 +47,11 @@ void touch_callback(void *data, void *context)
         slog("%s is ",other->name);
 		other->body.velocity = vec3d(-other->body.velocity.x,-other->body.velocity.y,-other->body.velocity.z); //move cube2 in opposite direction as soon as it collides with cube1
 		
-		
     }
     slog("touching me.... touching youuuuuuuu");
 }
 
-Entity *newCube(Vec3D position,const char *name)
+Entity *newCube(Vec3D position, Vec3D rotation, const char *name)
 {
     Entity * ent;
     ent = entity_new();
@@ -59,9 +59,10 @@ Entity *newCube(Vec3D position,const char *name)
     {
         return NULL;
     }
-    ent->objModel = obj_load("models/cube.obj");
-    ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    ent->objModel = obj_load("models/Player_Gun.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
     vec3d_cpy(ent->body.position,position);
+	vec3d_cpy(ent->body.rotation,rotation);
     cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
     sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
@@ -76,7 +77,7 @@ int main(int argc, char *argv[])
     Space *space;
     Entity *cube1,*cube2;
     char bGameLoopRunning = 1;
-    Vec3D cameraPosition = {0,-10,0.3};
+    Vec3D cameraPosition = {0,-15,0.3};
     Vec3D cameraRotation = {90,0,0};
     SDL_Event e;
     Obj *bgobj;
@@ -94,8 +95,8 @@ int main(int argc, char *argv[])
     bgobj = obj_load("models/mountainvillage.obj");
     bgtext = LoadSprite("models/mountain_text.png",1024,1024);
     
-    cube1 = newCube(vec3d(-5,0,0),"Cubert");
-    cube2 = newCube(vec3d(5,0,0),"Hobbes");
+    cube1 = newCube(vec3d(-10,0,3),vec3d(10,5,10),"Cubert");
+    cube2 = newCube(vec3d(5,0,3),vec3d(0,0,0),"Hobbes");
     
     cube2->body.velocity.x = -0.1; //move cube2 0.1 units left
     
@@ -104,7 +105,6 @@ int main(int argc, char *argv[])
     
     space_add_body(space,&cube1->body);
     space_add_body(space,&cube2->body);
-    //space_add_body(space,&gun->body);
     while (bGameLoopRunning)
     {
         for (i = 0; i < 100;i++)
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
                 }
                 else if (e.key.keysym.sym == SDLK_z)
                 {
-                    cameraPosition.z--;
+                    cameraPosition.z-= 2;
                 }
                 else if (e.key.keysym.sym == SDLK_w)
                 {
@@ -177,19 +177,19 @@ int main(int argc, char *argv[])
                 }
                 else if (e.key.keysym.sym == SDLK_LEFT)
                 {
-                    cameraRotation.z += 1;
+                    cameraRotation.z += 10;
                 }
                 else if (e.key.keysym.sym == SDLK_RIGHT)
                 {
-                    cameraRotation.z -= 1;
+                    cameraRotation.z -= 10;
                 }
                 else if (e.key.keysym.sym == SDLK_UP)
                 {
-                    cameraRotation.x += 1;
+                    cameraRotation.x += 10;
                 }
                 else if (e.key.keysym.sym == SDLK_DOWN)
                 {
-                    cameraRotation.x -= 1;
+                    cameraRotation.x -= 10;
                 }
             }
         }

@@ -13,6 +13,7 @@ typedef struct Entity_S
     int uid;    /**<unique id of this entity*/
     char name[128];
     Vec3D acceleration;
+	Vec3D position;
     Vec3D rotation;
     Vec3D scale;
 	Vec3D velocity;

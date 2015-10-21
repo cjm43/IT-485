@@ -34,23 +34,23 @@ void set_camera(Vec3D position, Vec3D rotation);
 
 void touch_callback(void *data, void *context) //function for objects touching
 {
-    Entity *me,*other;
+    Entity *me,*other, *soldier1, *soldier2;
     Body *obody;
     if ((!data)||(!context))return;
-    me = (Entity *)data;
-	me->body.velocity = vec3d(-me->body.velocity.x,-me->body.velocity.y,-me->body.velocity.z);
+    soldier1 = (Entity *)data;
+	soldier1->body.velocity = vec3d(-soldier1->body.velocity.x,-soldier1->body.velocity.y,-soldier1->body.velocity.z);
     obody = (Body *)context;
     if (entity_is_entity(obody->touch.data)) //if entites are touching
     {
 		/*have cube2 move right after touching cube1*/
-        other = (Entity *)obody->touch.data;
-        slog("%s is ",other->name);
+        soldier2 = (Entity *)obody->touch.data;
+        //slog("%s is ",other->name);
 		/*Health and ammo pickup disappear when touched*/
 
-		//other->body.velocity = vec3d(-other->body.velocity.x,-other->body.velocity.y,-other->body.velocity.z); //move cube2 in opposite direction as soon as it collides with cube1
+		soldier2->body.velocity = vec3d(-soldier2->body.velocity.x,-soldier2->body.velocity.y,-soldier2->body.velocity.z); //move cube2 in opposite direction as soon as it collides with cube1
 		
     }
-    slog("touching me.... touching youuuuuuuu");
+    //slog("touching me.... touching youuuuuuuu");
 }
 
 Entity *newAssault(Vec3D position)//creates object
@@ -737,8 +737,8 @@ int main(int argc, char *argv[])
 	soldier7 = newSoldier7(vec3d(-120,-159,-10.6),"soldier");
     
     //cube2->body.velocity.x = -0.1; //move cube2 0.1 units left
-	//soldier1->body.velocity.y = 0.1;
-	//soldier2->body.velocity.y = -0.1;
+	soldier1->body.velocity.y = 0.1;
+	soldier2->body.velocity.y = -0.1;
     
     space = space_new();
     space_set_steps(space,100);
@@ -868,6 +868,32 @@ int main(int argc, char *argv[])
                     cameraRotation.x -= 15;
                 }
             }
+
+			/*if mouse is moved. NEED TO FIGURE OUT HOW TO TURN CAMERA*/
+
+			/*if (e.type == SDL_MOUSEMOTION){
+				if(e.motion.xrel){
+					cameraRotation.x -= 1;
+				}
+				else if (e.motion.xrel){
+					cameraRotation.x = 1;
+				}
+			}
+			if (e.type == SDL_MOUSEMOTION){
+				if(e.motion.yrel){
+					cameraRotation.y -= 1;
+				}
+				else if (e.motion.yrel){
+					cameraRotation.x = 1;
+				}
+			}*/
+
+			/*if mouse button is pressed*/
+			if (e.type == SDL_MOUSEBUTTONDOWN){
+				assault = newAssault(vec3d(70,-20,-3));
+				assault->body.velocity.y = -0.1; 
+				slog("fire");
+			}
         }
 
         graphics3d_frame_begin();

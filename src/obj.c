@@ -409,7 +409,7 @@ void obj_draw(
     Vec3D scale,
     Vec4D color,
     Sprite *texture
-             )
+    )
 {
     int i;
     ObjTriangle* triangle;

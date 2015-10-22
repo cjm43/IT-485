@@ -75,6 +75,28 @@ Entity *newAssault(Vec3D position)//creates object
     return ent;
 }
 
+Entity *newAssault2(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/Player_Gun.obj");
+    ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 180;
+	ent->scale.x = 1;
+	ent->scale.y = 1;
+	ent->scale.z = 1;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
 Entity *newPistol(Vec3D position)//creates object
 {
     Entity * ent;
@@ -679,7 +701,7 @@ int main(int argc, char *argv[])
     int i;
     float r = 0;
     Space *space;
-    Entity *assault,*pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3, *drone1, *drone2, *drone3, *drone4, *turret1, *turret2, *turret3, *turret4, *turret5, *turret6, *turret7, *soldier1, *soldier2, *soldier3, *soldier4, *soldier5, *soldier6, *soldier7;
+    Entity *assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3, *drone1, *drone2, *drone3, *drone4, *turret1, *turret2, *turret3, *turret4, *turret5, *turret6, *turret7, *soldier1, *soldier2, *soldier3, *soldier4, *soldier5, *soldier6, *soldier7;
     char bGameLoopRunning = 1;
     Vec3D cameraPosition = {130,-20,0.3}; //set initial camera position
     Vec3D cameraRotation = {90,0,90};    //set initial rotation
@@ -696,13 +718,14 @@ int main(int argc, char *argv[])
     obj_init();
     entity_init(255);
 
-	//obj = obj_load("models/Player_Gun.obj");
+	//obj = obj_load("models/cube.obj");
 	//texture = LoadSprite("models/cube_text.png",1024,1024);
     
     bgobj = obj_load("models/level.obj");
     bgtext = LoadSprite("models/mountain_text.png",1920,1080);
     
-    assault = newAssault(vec3d(90,-20,-3)); //create cube with position and name
+    assault = newAssault(vec3d(90,-20,-3)); //create cube with position
+	//assault2 = newAssault2(vec3d(90,-20,-3));
 	pistol = newPistol(vec3d(90,-30,-1));
 	shotgun = newShotgun(vec3d(90,-17,-3));
 	smg = newSmg(vec3d(90,-35,-2));
@@ -739,11 +762,13 @@ int main(int argc, char *argv[])
     //cube2->body.velocity.x = -0.1; //move cube2 0.1 units left
 	soldier1->body.velocity.y = 0.1;
 	soldier2->body.velocity.y = -0.1;
+	//assault2->body.velocity.y = -0.1;
     
     space = space_new();
     space_set_steps(space,100);
     
     space_add_body(space,&assault->body);
+	//space_add_body(space,&assault2->body);
 	space_add_body(space,&pistol->body);
 	space_add_body(space,&shotgun->body);
 	space_add_body(space,&smg->body);
@@ -813,7 +838,6 @@ int main(int argc, char *argv[])
                             cos(cameraRotation.z * DEGTORAD),
                             0
                         ));
-					//cameraPosition.x -= 5;
                 }
                 else if (e.key.keysym.sym == SDLK_s)//move back
                 {
@@ -825,7 +849,6 @@ int main(int argc, char *argv[])
                             -cos(cameraRotation.z * DEGTORAD),
                             0
                         ));
-					//cameraPosition.x += 5;
                 }
                 else if (e.key.keysym.sym == SDLK_d)//move right
                 {
@@ -837,7 +860,6 @@ int main(int argc, char *argv[])
                             sin(cameraRotation.z * DEGTORAD),
                             0
                         ));
-					//cameraPosition.y += 5;
                 }
                 else if (e.key.keysym.sym == SDLK_a)//move left
                 {
@@ -849,7 +871,6 @@ int main(int argc, char *argv[])
                             -sin(cameraRotation.z * DEGTORAD),
                             0
                         ));
-					//cameraPosition.y -= 5;
                 }
                 else if (e.key.keysym.sym == SDLK_LEFT)
                 {
@@ -872,26 +893,25 @@ int main(int argc, char *argv[])
 			/*if mouse is moved. NEED TO FIGURE OUT HOW TO TURN CAMERA*/
 
 			/*if (e.type == SDL_MOUSEMOTION){
-				if(e.motion.xrel){
+				if(e.motion.x){
 					cameraRotation.x -= 1;
 				}
-				else if (e.motion.xrel){
-					cameraRotation.x = 1;
+				else if(e.motion.x){
+					cameraRotation.x += 1;
 				}
 			}
 			if (e.type == SDL_MOUSEMOTION){
-				if(e.motion.yrel){
-					cameraRotation.y -= 1;
+				if(e.motion.y){
+					cameraRotation.z -= 1;
 				}
-				else if (e.motion.yrel){
-					cameraRotation.x = 1;
+				else if (e.motion.y){
+					cameraRotation.z += 1;
 				}
 			}*/
 
 			/*if mouse button is pressed*/
 			if (e.type == SDL_MOUSEBUTTONDOWN){
-				assault = newAssault(vec3d(70,-20,-3));
-				assault->body.velocity.y = -0.1; 
+				assault2 = newAssault2(vec3d(70,-20,-3));
 				slog("fire");
 			}
         }

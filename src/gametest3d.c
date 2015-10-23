@@ -727,10 +727,11 @@ int main(int argc, char *argv[])
     assault = newAssault(vec3d(3.0f,-4.0f,-1.0f)); //left/right; up/down; forward/back
 	assault->camera_independent = 1;
 
-	cube = newCube(vec3d(3.0f,-4.0f,-3.0f));//create cube with position
+
+	cube = newCube(vec3d(3.0f,-4.0f,-1.0f));//create cube with position
 	cube->camera_independent = 1;
 	
-	pistol = newPistol(vec3d(90,-30,-1));//90,-30,-1
+	pistol = newPistol(vec3d(90,-30,-1));
 	
 	shotgun = newShotgun(vec3d(90,-17,-3));
 	smg = newSmg(vec3d(90,-35,-2));
@@ -915,10 +916,10 @@ int main(int argc, char *argv[])
 
 			/*if mouse button is pressed. If player fires, spawn bullet(cube) and move it forward*/
 			if (e.type == SDL_MOUSEBUTTONDOWN){
-				cube = newCube(vec3d(120.0f,-20.0f,0.0f));
+				cube = newCube(vec3d(120.0f,-20.0f,-.5f));
 				//cube->camera_independent = 1;
 				space_add_body(space,&cube->body);
-				cube->body.velocity.x = -0.1; 
+				cube->body.velocity.x = -0.4; 
 				slog("fire");
 			}
         }
@@ -932,7 +933,6 @@ int main(int argc, char *argv[])
 		set_camera(
             cameraPosition,
             cameraRotation);
-        
         
         entity_draw_all(1);  
 
@@ -954,8 +954,6 @@ int main(int argc, char *argv[])
 			texture
         );*/
 
-       
-        
         if (r > 360)r -= 360;
         glPopMatrix();
         /* drawing code above here! */

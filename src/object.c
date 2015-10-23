@@ -73,8 +73,8 @@ void entity_draw_all(Uint8 using_camera)
     int i;
     for (i = 0;i < __entity_max;i++)
     {
-        if (__entity_list[i].inuse
-			&&(!using_camera == __entity_list[i].camera_independent))
+        if (__entity_list[i].inuse //if entity is in use
+			&&(!using_camera == __entity_list[i].camera_independent))  //and not using camera is equal to entity in list is camera independent 
         {
             entity_draw(&__entity_list[i]);
         }

@@ -68,12 +68,13 @@ Entity *entity_new()
     return NULL;
 }
 
-void entity_draw_all()
+void entity_draw_all(Uint8 using_camera)
 {
     int i;
     for (i = 0;i < __entity_max;i++)
     {
-        if (__entity_list[i].inuse)
+        if (__entity_list[i].inuse
+			&&(!using_camera == __entity_list[i].camera_independent))
         {
             entity_draw(&__entity_list[i]);
         }

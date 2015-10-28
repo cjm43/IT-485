@@ -65,9 +65,31 @@ Entity *newCube(Vec3D position)//creates object
     vec3d_cpy(ent->body.position,position);
 	ent->rotation.x = 90;
 	ent->rotation.y = 180;
-	ent->scale.x = 1;
-	ent->scale.y = 1;
-	ent->scale.z = 1;
+	ent->scale.x = 0.5;
+	ent->scale.y = 0.5;
+	ent->scale.z = 0.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newPlayer(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/player.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;
+	ent->scale.x = 3;
+	ent->scale.y = 3.5;
+	ent->scale.z = 3;
     cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
     //sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
@@ -108,8 +130,9 @@ Entity *newPistol(Vec3D position)//creates object
     ent->objModel = obj_load("models/pistol.obj");
     //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
     vec3d_cpy(ent->body.position,position);
-	ent->rotation.x = 90;
-	ent->rotation.y = 0;
+	ent->rotation.x = 0;
+	ent->rotation.y = -90;
+	//ent->rotation.z = 90;
 	ent->scale.x = 0.5;
 	ent->scale.y = 0.5;
 	ent->scale.z = 0.5;
@@ -130,8 +153,8 @@ Entity *newShotgun(Vec3D position)//creates object
     ent->objModel = obj_load("models/shotgun.obj");
     //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
     vec3d_cpy(ent->body.position,position);
-	ent->rotation.x = 90;
-	ent->rotation.y = 0;
+	ent->rotation.x = 0;
+	ent->rotation.y = -90;
     cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
     //sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
@@ -149,8 +172,8 @@ Entity *newSmg(Vec3D position)//creates object
     ent->objModel = obj_load("models/smg.obj");
     //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
     vec3d_cpy(ent->body.position,position);
-	ent->rotation.x = 90;
-	ent->rotation.y = 180;
+	ent->rotation.x = 0;
+	ent->rotation.y = 90;
 	ent->scale.x = 0.7;
 	ent->scale.y = 0.7;
 	ent->scale.z = 0.7;
@@ -701,7 +724,7 @@ int main(int argc, char *argv[])
     int i;
     float r = 0;
     Space *space;
-    Entity *cube,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3, *drone1, *drone2, *drone3, *drone4, *turret1, *turret2, *turret3, *turret4, *turret5, *turret6, *turret7, *soldier1, *soldier2, *soldier3, *soldier4, *soldier5, *soldier6, *soldier7;
+    Entity *cube,*player,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3, *drone1, *drone2, *drone3, *drone4, *turret1, *turret2, *turret3, *turret4, *turret5, *turret6, *turret7, *soldier1, *soldier2, *soldier3, *soldier4, *soldier5, *soldier6, *soldier7;
     char bGameLoopRunning = 1;
     Vec3D cameraPosition = {130,-20,0.3}; //set initial camera position
     Vec3D cameraRotation = {90,0,90};    //set initial rotation
@@ -724,17 +747,24 @@ int main(int argc, char *argv[])
     bgobj = obj_load("models/level.obj");
     bgtext = LoadSprite("models/mountain_text.png",1920,1080);
 
-    assault = newAssault(vec3d(3.0f,-4.0f,-1.0f)); //left/right; up/down; forward/back
-	assault->camera_independent = 1;
+	player = newPlayer(vec3d(132,-20,-7));
+	//player->camera_independent = 1;
 
-
-	cube = newCube(vec3d(3.0f,-4.0f,-1.0f));//create cube with position
-	cube->camera_independent = 1;
+	assault = newAssault(vec3d(90,-20,2));
+    //assault = newAssault(vec3d(3.0f,-4.0f,-1.0f)); //left/right; up/down; forward/back
+	//assault->camera_independent = 1;
 	
 	pistol = newPistol(vec3d(90,-30,-1));
+	//pistol = newPistol(vec3d(1.0f,-1.9f,-2.0f));
+	//pistol->camera_independent = 1;
 	
 	shotgun = newShotgun(vec3d(90,-17,-3));
+	//shotgun = newShotgun(vec3d(0.0f,-3.0f,-4.0f));
+	//shotgun->camera_independent = 1;
+
 	smg = newSmg(vec3d(90,-35,-2));
+	//smg = newSmg(vec3d(1.5f,-3.0f,-6.0f));
+	//smg->camera_independent = 1;
 
 	health = newHealth(vec3d(-5,-29,-6));
 	health2 = newHealth(vec3d(-120,-95,-6));
@@ -768,16 +798,15 @@ int main(int argc, char *argv[])
     //cube2->body.velocity.x = -0.1; //move cube2 0.1 units left
 	soldier1->body.velocity.y = 0.1;
 	soldier2->body.velocity.y = -0.1;
-	
     
     space = space_new();
     space_set_steps(space,100);
 
-	space_add_body(space,&cube->body);
+	space_add_body(space,&player->body);
 
     space_add_body(space,&assault->body);
 	space_add_body(space,&pistol->body);
-	space_add_body(space,&shotgun->body);
+    space_add_body(space,&shotgun->body);
 	space_add_body(space,&smg->body);
 
 	space_add_body(space,&health->body);
@@ -897,6 +926,34 @@ int main(int argc, char *argv[])
                 }
             }
 
+			/*player weapon switch*/
+			if (e.type == SDL_KEYDOWN){
+				if (e.key.keysym.sym == SDLK_1){
+					pistol = newPistol(vec3d(1.0f,-1.9f,-2.0f));
+	                pistol->camera_independent = 1;
+					space_add_body(space,&pistol->body);
+					slog("pistol");
+				}
+				else if (e.key.keysym.sym == SDLK_2){
+					assault = newAssault(vec3d(3.0f,-4.0f,-1.0f)); 
+	                assault->camera_independent = 1;
+					space_add_body(space,&assault->body);
+					slog("assault rifle");
+				}
+				else if (e.key.keysym.sym == SDLK_3){
+					smg = newSmg(vec3d(1.5f,-3.0f,-6.0f));
+	                smg->camera_independent = 1;
+					space_add_body(space,&smg->body);
+					slog("smg");
+				}
+				else if (e.key.keysym.sym == SDLK_4){
+					shotgun = newShotgun(vec3d(0.0f,-3.0f,-4.0f));
+	                shotgun->camera_independent = 1;
+					space_add_body(space,&shotgun->body);
+					slog("shotgun");
+				}
+			}
+
 			/*if mouse is moved*/
 
 			if (e.type == SDL_MOUSEMOTION){  //move based on window size (1024,768); set safe bounding box (512x384)
@@ -916,7 +973,7 @@ int main(int argc, char *argv[])
 
 			/*if mouse button is pressed. If player fires, spawn bullet(cube) and move it forward*/
 			if (e.type == SDL_MOUSEBUTTONDOWN){
-				cube = newCube(vec3d(120.0f,-20.0f,-.5f));
+				cube = newCube(vec3d(120.0f,-20.0f,-0.2f));
 				//cube->camera_independent = 1;
 				space_add_body(space,&cube->body);
 				cube->body.velocity.x = -0.4; 
@@ -934,7 +991,7 @@ int main(int argc, char *argv[])
             cameraPosition,
             cameraRotation);
         
-        entity_draw_all(1);  
+        entity_draw_all(2);  
 
 		 obj_draw(
             bgobj,
@@ -944,15 +1001,6 @@ int main(int argc, char *argv[])
             vec4d(1,1,1,1),
             bgtext
         );
-		
-		/*obj_draw(
-            obj,
-            vec3d(0,0,0),
-            vec3d(90,r++,0),
-            vec3d(0.5,0.5,0.5),
-            vec4d(1,1,1,1),
-			texture
-        );*/
 
         if (r > 360)r -= 360;
         glPopMatrix();
@@ -973,247 +1021,3 @@ void set_camera(Vec3D position, Vec3D rotation)
 }
 
 /*eol@eof*/
-
-
-
-/**
- * gametest3d
- * @license The MIT License (MIT)
- *   @copyright Copyright (c) 2015 EngineerOfLies
- *    Permission is hereby granted, free of charge, to any person obtaining a copy
- *    of this software and associated documentation files (the "Software"), to deal
- *    in the Software without restriction, including without limitation the rights
- *    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *    copies of the Software, and to permit persons to whom the Software is
- *    furnished to do so, subject to the following conditions:
- *    The above copyright notice and this permission notice shall be included in all
- *    copies or substantial portions of the Software.
- *    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *    SOFTWARE.
- */
-/*
-#include "simple_logger.h"
-#include "graphics3d.h"
-#include "shader.h"
-#include "obj.h"
-#include "vector.h"
-#include "sprite.h"
-#include "entity.h"
-#include <math.h>
-void set_camera(Vec3D position, Vec3D rotation);
-void spawncube(Vec3D position);
-
-
-int main(int argc, char *argv[])
-{
-    GLuint vao;
-    float r = 0;
-    GLuint triangleBufferObject;
-    char bGameLoopRunning = 1;
-    Vec3D cameraPosition = {0,-10,0.3};
-    Vec3D cameraRotation = {90,0,0};
-    SDL_Event e;
-    Obj *obj,*bgobj;
-    Sprite *texture,*bgtext;
-    const float triangleVertices[] = {
-        0.0f, 0.5f, 0.0f, 1.0f,
-        0.5f, -0.366f, 0.0f, 1.0f,
-        -0.5f, -0.366f, 0.0f, 1.0f,
-        //next part contains vertex colors
-        1.0f, 0.0f, 0.0f, 1.0f,
-        0.0f, 1.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 1.0f, 1.0f  
-    }; //we love you vertices!
-    
-    init_logger("gametest3d.log");
-    if (graphics3d_init(1024,768,1,"gametest3d",33) != 0)
-    {
-        return -1;
-    }
-    model_init();
-    obj_init();
-	initEntities();
-    
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao); //make our vertex array object, we need it to restore state we set after binding it. Re-binding reloads the state associated with it.
-    
-    glGenBuffers(1, &triangleBufferObject); //create the buffer
-    glBindBuffer(GL_ARRAY_BUFFER, triangleBufferObject); //we're "using" this one now
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW); //formatting the data for the buffer
-    glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind any buffers
-    
-    obj = obj_load("models/cube.obj");
-    texture = LoadSprite("models/cube_text.png",1024,1024);
-
-    bgobj = obj_load("models/mountainvillage.obj");
-    bgtext = LoadSprite("models/mountain_text.png",1024,1024);
-    
-//    obj = obj_load("models/mountainvillage.obj");
-    
-    /*spawn cube in game
-    spawncube(vec3d(0,5,0) //position
-			 ); 
-	spawncube(vec3d(2,5,2)
-			  //vec3d(0,90,0)
-		     );
-	spawncube(vec3d(0,10,0));
-
-    while (bGameLoopRunning)
-    {
-        while ( SDL_PollEvent(&e) ) 
-        {
-            if (e.type == SDL_QUIT)
-            {
-                bGameLoopRunning = 0;
-            }
-            else if (e.type == SDL_KEYDOWN)
-            {
-                if (e.key.keysym.sym == SDLK_ESCAPE)
-                {
-                    bGameLoopRunning = 0;
-                }
-                else if (e.key.keysym.sym == SDLK_SPACE)
-                {
-                    cameraPosition.z++;
-                }
-                else if (e.key.keysym.sym == SDLK_z)
-                {
-                    cameraPosition.z--;
-                }
-                else if (e.key.keysym.sym == SDLK_w)
-                {
-                    vec3d_add(
-                        cameraPosition,
-                        cameraPosition,
-                        vec3d(
-                            -sin(cameraRotation.z * DEGTORAD),
-                            cos(cameraRotation.z * DEGTORAD),
-                            0
-                        ));
-                }
-                else if (e.key.keysym.sym == SDLK_s)
-                {
-                    vec3d_add(
-                        cameraPosition,
-                        cameraPosition,
-                        vec3d(
-                            sin(cameraRotation.z * DEGTORAD),
-                            -cos(cameraRotation.z * DEGTORAD),
-                            0
-                        ));
-                }
-                else if (e.key.keysym.sym == SDLK_d)
-                {
-                    vec3d_add(
-                        cameraPosition,
-                        cameraPosition,
-                        vec3d(
-                            cos(cameraRotation.z * DEGTORAD),
-                            sin(cameraRotation.z * DEGTORAD),
-                            0
-                        ));
-                }
-                else if (e.key.keysym.sym == SDLK_a)
-                {
-                    vec3d_add(
-                        cameraPosition,
-                        cameraPosition,
-                        vec3d(
-                            -cos(cameraRotation.z * DEGTORAD),
-                            -sin(cameraRotation.z * DEGTORAD),
-                            0
-                        ));
-                }
-                else if (e.key.keysym.sym == SDLK_LEFT)
-                {
-                    cameraRotation.z += 1;
-                }
-                else if (e.key.keysym.sym == SDLK_RIGHT)
-                {
-                    cameraRotation.z -= 1;
-                }
-                else if (e.key.keysym.sym == SDLK_UP)
-                {
-                    cameraRotation.x += 1;
-                }
-                else if (e.key.keysym.sym == SDLK_DOWN)
-                {
-                    cameraRotation.x -= 1;
-                }
-
-            }
-        }
-
-        graphics3d_frame_begin();
-        
-        glPushMatrix();
-        set_camera(
-            cameraPosition,
-            cameraRotation);
-
-        drawEntities();  //get draw data
-		updateEntities(); //update entity for every loop
-
-		/*spawncube(  //create cube
-			 vec3d(3,5,0), //position
-			 vec3d(90,r++,0) //rotation
-		   );
-  
-        obj_draw(
-            bgobj,
-            vec3d(0,0,2),
-            vec3d(90,90,0), //rotate ground
-            vec3d(5,5,5),
-            vec4d(1,1,1,1),
-            bgtext
-        );
-        
-        obj_draw(  //create cube
-            obj,
-            vec3d(0,0,0), //position
-            vec3d(0,r++,0), //rotation indefinitely
-            vec3d(0.5,0.5,0.5), //scale
-            vec4d(1,1,1,1),
-            texture
-        );
-        if (r > 360)r -= 360;
-        glPopMatrix();
-        /* drawing code above here! 
-        graphics3d_next_frame();
-    } 
-    return 0;
-}
-
-void set_camera(Vec3D position, Vec3D rotation)
-{
-    glRotatef(-rotation.x, 1.0f, 0.0f, 0.0f);
-    glRotatef(-rotation.y, 0.0f, 1.0f, 0.0f);
-    glRotatef(-rotation.z, 0.0f, 0.0f, 1.0f);
-    glTranslatef(-position.x,
-                 -position.y,
-                 -position.z);
-}
-
-void spawncube(Vec3D position, Vec3D rotation) //spawn cube function
-{
-	Entity *ent;  //new entity pointer with variable Entity
-	ent = newEntity(); //ent gets newEntity function data
-
-	if(ent != NULL)   //if there is an entity
-	{
-		ent->position=position;                     //entity is pointing to position
-		ent->rotation=rotation;                     //entity points to rotation
-		ent->model=obj_load("models/cube.obj");;    //entity is pointing to object cube
-		ent->sprite= LoadSprite("models/cube_text.png",1024,1024);;  //entity is pointing to sprite texture
-	}
-}
-
-
-*/
-/*eol@eof*/
-

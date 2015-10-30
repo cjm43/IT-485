@@ -52,6 +52,30 @@ void touch_callback(void *data, void *context) //function for objects touching
     //slog("touching me.... touching youuuuuuuu");
 }
 
+/*Entity *newSmoke(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+	ent->camera_independent = 1;
+    //ent->objModel = obj_load("models/cube.obj");
+    ent->texture = LoadSprite("models/smoke.png",512,512);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 180;
+	ent->scale.x = 0.5;
+	ent->scale.y = 0.5;
+	ent->scale.z = 0.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    //mgl_callback_set(&ent->body.touch,touch_callback,ent);
+	ent->type = ENTITYTYPE_PARTICLE;
+    return ent;
+}*/
+
 Entity *newCube(Vec3D position)//creates object
 {
     Entity * ent;
@@ -105,7 +129,7 @@ Entity *newAssault(Vec3D position)//creates object
         return NULL;
     }
     ent->objModel = obj_load("models/Player_Gun.obj");
-    ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
     vec3d_cpy(ent->body.position,position);
 	ent->rotation.x = 0;
 	ent->rotation.y = 90;
@@ -724,7 +748,7 @@ int main(int argc, char *argv[])
     int i;
     float r = 0;
     Space *space;
-    Entity *cube,*player,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3, *drone1, *drone2, *drone3, *drone4, *turret1, *turret2, *turret3, *turret4, *turret5, *turret6, *turret7, *soldier1, *soldier2, *soldier3, *soldier4, *soldier5, *soldier6, *soldier7;
+    Entity *cube,*smoke,*player,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3, *drone1, *drone2, *drone3, *drone4, *turret1, *turret2, *turret3, *turret4, *turret5, *turret6, *turret7, *soldier1, *soldier2, *soldier3, *soldier4, *soldier5, *soldier6, *soldier7;
     char bGameLoopRunning = 1;
     Vec3D cameraPosition = {130,-20,0.3}; //set initial camera position
     Vec3D cameraRotation = {90,0,90};    //set initial rotation
@@ -749,6 +773,8 @@ int main(int argc, char *argv[])
 
 	player = newPlayer(vec3d(132,-20,-7));
 	//player->camera_independent = 1;
+
+	//smoke = newSmoke(vec3d(80,-20,2));
 
 	assault = newAssault(vec3d(90,-20,2));
     //assault = newAssault(vec3d(3.0f,-4.0f,-1.0f)); //left/right; up/down; forward/back
@@ -926,7 +952,7 @@ int main(int argc, char *argv[])
                 }
             }
 
-			/*player weapon switch*/
+			/*player weapon switch. need to remove equipped weapon when switching*/
 			if (e.type == SDL_KEYDOWN){
 				if (e.key.keysym.sym == SDLK_1){
 					pistol = newPistol(vec3d(1.0f,-1.9f,-2.0f));
@@ -985,13 +1011,13 @@ int main(int argc, char *argv[])
         
         glPushMatrix();
 
-		entity_draw_all(0); 
+		entity_draw_all(0); //draw entities not depedent on camera weapons
 
 		set_camera(
             cameraPosition,
             cameraRotation);
         
-        entity_draw_all(2);  
+        entity_draw_all(1);  //draw entities dependent on camera
 
 		 obj_draw(
             bgobj,

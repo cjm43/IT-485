@@ -57,6 +57,12 @@
     <ClCompile Include="..\src\body.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\weapon.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\particle.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\graphics3d.h">
@@ -96,6 +102,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\weapon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\particle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

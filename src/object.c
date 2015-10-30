@@ -2,6 +2,7 @@
 
 #include "object.h"
 #include "simple_logger.h"
+#include "particle.h"
 
 static Entity *__entity_list = NULL;
 static int __entity_max = 0;
@@ -87,6 +88,13 @@ void entity_draw(Entity *ent)
     {
         return;
     }
+	switch(ent->type)
+	{
+	case ENTITYTYPE_PARTICLE:
+	    particle_draw(ent->position, ent->scale, ent->texture, 16);
+		break;
+
+	default:
     obj_draw(
         ent->objModel,
         ent->body.position,
@@ -95,6 +103,8 @@ void entity_draw(Entity *ent)
         ent->color,
         ent->texture
     );
+	break;
+	}
 }
 
 int entity_is_entity(void *data)

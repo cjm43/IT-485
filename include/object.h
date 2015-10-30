@@ -6,12 +6,17 @@
 #include "sprite.h"
 #include "Collision.h"
 #include "body.h"
+#define ENTITYTYPE_PLAYER 0
+#define ENTITYTYPE_ENEMY 1
+#define ENTITYTYPE_OBJECT 2
+#define ENTITYTYPE_PARTICLE 3
 
 typedef struct Entity_S
 {
     int inuse;
     int uid;    /**<unique id of this entity*/
-    char name[128];
+    int type;
+	char name[128];
     Vec3D acceleration;
 	Vec3D position;
     Vec3D rotation;

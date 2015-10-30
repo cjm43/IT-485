@@ -20,11 +20,13 @@
     <ClCompile Include="..\src\model.c" />
     <ClCompile Include="..\src\obj.c" />
     <ClCompile Include="..\src\object.c" />
+    <ClCompile Include="..\src\particle.c" />
     <ClCompile Include="..\src\shader.c" />
     <ClCompile Include="..\src\simple_logger.c" />
     <ClCompile Include="..\src\space.c" />
     <ClCompile Include="..\src\sprite.c" />
     <ClCompile Include="..\src\vector.c" />
+    <ClCompile Include="..\src\weapon.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\body.h" />
@@ -35,11 +37,13 @@
     <ClInclude Include="..\include\model.h" />
     <ClInclude Include="..\include\obj.h" />
     <ClInclude Include="..\include\object.h" />
+    <ClInclude Include="..\include\particle.h" />
     <ClInclude Include="..\include\shader.h" />
     <ClInclude Include="..\include\simple_logger.h" />
     <ClInclude Include="..\include\space.h" />
     <ClInclude Include="..\include\sprite.h" />
     <ClInclude Include="..\include\vector.h" />
+    <ClInclude Include="..\include\weapon.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\Makefile" />

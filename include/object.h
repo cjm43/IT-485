@@ -27,6 +27,7 @@ typedef struct Entity_S
     Sprite *texture;    /**<object texture*/
     Body body;
 	Uint8 camera_independent; //create objects that are not dependent on camera
+	Uint8 hidden; //hide entity
 }Entity;
 
 /**

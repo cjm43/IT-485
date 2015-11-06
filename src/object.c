@@ -62,6 +62,7 @@ Entity *entity_new()
             memset(&__entity_list[i],0,sizeof(Entity));
             __entity_list[i].inuse = 1;
             vec3d_set(__entity_list[i].scale,1,1,1);
+			__entity_list[i].hidden = 0;
             vec4d_set(__entity_list[i].color,1,1,1,1);
             return &__entity_list[i];
         }
@@ -75,7 +76,8 @@ void entity_draw_all(Uint8 using_camera)
     for (i = 0;i < __entity_max;i++)
     {
         if (__entity_list[i].inuse //if entity is in use
-			&&(!using_camera == __entity_list[i].camera_independent))  //and not using camera is equal to entity in list is camera independent 
+			&& !__entity_list[i].hidden //not hidden
+			&&(!using_camera == __entity_list[i].camera_independent || !using_camera == __entity_list[i].camera_independent))  //and not using camera is equal to entity in list is camera independent 
         {
             entity_draw(&__entity_list[i]);
         }

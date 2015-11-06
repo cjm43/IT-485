@@ -420,7 +420,7 @@ void obj_draw(
         slog("cannot draw obj, none specified!");
         return;
     }
-    glPushMatrix();
+    glPushMatrix(); //push down the matrix stack, inherits properties from parent
 
     glEnable(GL_LIGHTING);
     glEnable(GL_BLEND);
@@ -429,8 +429,8 @@ void obj_draw(
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     if(texture != NULL)
     {
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D,texture->texture);
+        glEnable(GL_TEXTURE_2D);//enable texture
+        glBindTexture(GL_TEXTURE_2D,texture->texture);//bind texture, enable and use specific texture
     }
     
     glEnable(GL_COLOR_MATERIAL);
@@ -444,7 +444,7 @@ void obj_draw(
     glScalef(scale.x,scale.y,scale.z);
     
     glColor3f(color.x,color.y,color.z);
-    glBegin(GL_TRIANGLES);
+    glBegin(GL_TRIANGLES); //start giving opengl triangle geometry
     for (i = 0; i < obj->num_tris; i++)
     {
         triangle = &obj->triangle_array[i];
@@ -510,7 +510,7 @@ void obj_draw(
             obj->vertex_array[triangle->p[2].v * 3 + 2]);
         
     }
-    glEnd();
+    glEnd(); //finish giving geometry
     
     glColor4f(1,1,1,1);
     glDisable(GL_LIGHTING);
@@ -520,7 +520,7 @@ void obj_draw(
     {
         glDisable(GL_TEXTURE_2D);
     }    
-    glPopMatrix();
+    glPopMatrix(); //everything is only dealt within this object 
 }
 
 Model *obj_load_model(char *filename)

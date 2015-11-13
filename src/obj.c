@@ -420,7 +420,7 @@ void obj_draw(
         slog("cannot draw obj, none specified!");
         return;
     }
-    glPushMatrix(); //push down the matrix stack, inherits properties from parent
+    glPushMatrix(); //push down the matrix stack, inherits properties from parent, setup matrix for transform,scale,rotate
 
     glEnable(GL_LIGHTING);
     glEnable(GL_BLEND);
@@ -434,8 +434,8 @@ void obj_draw(
     }
     
     glEnable(GL_COLOR_MATERIAL);
-    glMaterialfv(GL_FRONT,GL_DIFFUSE,trans);
-    glDepthFunc(GL_LEQUAL);
+   // glMaterialfv(GL_FRONT,GL_DIFFUSE,trans);
+    //glDepthFunc(GL_LEQUAL);
     
     glTranslatef(position.x,position.y,position.z);
     glRotatef(rotation.x, 1.0f, 0.0f, 0.0f);
@@ -520,7 +520,7 @@ void obj_draw(
     {
         glDisable(GL_TEXTURE_2D);
     }    
-    glPopMatrix(); //everything is only dealt within this object 
+    glPopMatrix(); //everything is only dealt within this object, 
 }
 
 Model *obj_load_model(char *filename)

@@ -30,6 +30,8 @@
 #include "object.h"
 #include  "math.h"
 
+#define PI 3.14159265
+#define WEAPON_OFFSET .0625
 void set_camera(Vec3D position, Vec3D rotation);
 
 void touch_callback(void *data, void *context) //function for objects touching
@@ -770,8 +772,8 @@ int main(int argc, char *argv[])
 	//obj = obj_load("models/cube.obj");
 	//texture = LoadSprite("models/cube_text.png",1024,1024);
     
-    bgobj = obj_load("models/level.obj");
-    bgtext = LoadSprite("models/mountain_text.png",1920,1080);
+    bgobj = obj_load("models/maya_cube.obj");
+    bgtext = LoadSprite("models/Solid_blue.svg.png",1024,1024);
 
 	player = newPlayer(vec3d(1.0f,1.0f,1.0f));
 	//player->camera_independent = 1;
@@ -1011,9 +1013,14 @@ int main(int argc, char *argv[])
 
 			/*if mouse button is pressed. If player fires, spawn bullet(cube) and move it forward*/
 			if (e.type == SDL_MOUSEBUTTONDOWN){
-				cube = newCube(vec3d(120.0f,-20.0f,-.5f));
+				cube = newCube(vec3d(
+					cameraPosition.x-WEAPON_OFFSET*cos(cameraRotation.z*PI/180),
+					cameraPosition.y+WEAPON_OFFSET*sin(cameraRotation.z*PI/180),
+					cameraPosition.z-WEAPON_OFFSET*16));
 				space_add_body(space,&cube->body);
-				cube->body.velocity.x = -10.9; 
+				cube->body.velocity.x = -10.9*sin(cameraRotation.z*PI/180); 
+				cube->body.velocity.y = 10.9*cos(cameraRotation.z*PI/180);
+
 				//cube->camera_independent = 1;
 				slog("fire");
 			}
@@ -1033,9 +1040,9 @@ int main(int argc, char *argv[])
 
 		 obj_draw(
             bgobj,
-            vec3d(0,0,-10),
+            vec3d(0,0,-10),//0,0,-10
             vec3d(90,90,0),
-            vec3d(5,5,5),
+            vec3d(5,5,5),//5,5,5
             vec4d(1,1,1,1),
             bgtext
         );

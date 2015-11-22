@@ -30,9 +30,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\body.h" />
+    <ClInclude Include="..\include\bsp.h" />
     <ClInclude Include="..\include\Collision.h" />
     <ClInclude Include="..\include\entity.h" />
     <ClInclude Include="..\include\graphics3d.h" />
+    <ClInclude Include="..\include\map.h" />
     <ClInclude Include="..\include\mgl_callback.h" />
     <ClInclude Include="..\include\model.h" />
     <ClInclude Include="..\include\obj.h" />
@@ -41,6 +43,7 @@
     <ClInclude Include="..\include\shader.h" />
     <ClInclude Include="..\include\simple_logger.h" />
     <ClInclude Include="..\include\space.h" />
+    <ClInclude Include="..\include\spawn.h" />
     <ClInclude Include="..\include\sprite.h" />
     <ClInclude Include="..\include\vector.h" />
     <ClInclude Include="..\include\weapon.h" />

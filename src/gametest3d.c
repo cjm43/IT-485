@@ -25,36 +25,40 @@
 #include "obj.h"
 #include "vector.h"
 #include "sprite.h"
-//#include "entity.h"
+#include "entity.h"
 #include "space.h"
-#include "object.h"
+//#include "object.h"
 #include  "math.h"
 
 #define PI 3.14159265
-#define WEAPON_OFFSET .0625
+#define WEAPON_OFFSET .0625 //1 divided by 2(double it if going up)
 void set_camera(Vec3D position, Vec3D rotation);
+int bbon = 0;
 
 void touch_callback(void *data, void *context) //function for objects touching
 {
-    Entity *me,*other, *soldier1, *soldier2;
+    Entity *me,*other, *soldier1, *soldier2, *ammo, *health;
     Body *obody;
     if ((!data)||(!context))return;
     soldier1 = (Entity *)data;
+	//player = (Entity *)data;
 	soldier1->body.velocity = vec3d(-soldier1->body.velocity.x,-soldier1->body.velocity.y,-soldier1->body.velocity.z);
+	//player->body.velocity = vec3d(-player->body.velocity.x,-player->body.velocity.y,-player->body.velocity.z);
     obody = (Body *)context;
     if (entity_is_entity(obody->touch.data)) //if entites are touching
     {
 		/*have cube2 move right after touching cube1*/
-        soldier2 = (Entity *)obody->touch.data;
-        //slog("%s is ",other->name);
+        ammo = (Entity *)obody->touch.data;
+		health = (Entity *)obody->touch.data;
 		/*Health and ammo pickup disappear when touched*/
-
-		soldier2->body.velocity = vec3d(-soldier2->body.velocity.x,-soldier2->body.velocity.y,-soldier2->body.velocity.z);
+		entity_free(ammo);
+		entity_free(health);
+		//soldier2->body.velocity = vec3d(-soldier2->body.velocity.x,-soldier2->body.velocity.y,-soldier2->body.velocity.z);
     }
     //slog("touching me.... touching youuuuuuuu");
 }
 
-/*Entity *newSmoke(Vec3D position)//creates object
+Entity *newSmoke(Vec3D position)//creates object
 {
     Entity * ent;
     ent = entity_new();
@@ -63,7 +67,7 @@ void touch_callback(void *data, void *context) //function for objects touching
         return NULL;
     }
 	ent->camera_independent = 1;
-    //ent->objModel = obj_load("models/cube.obj");
+    ent->objModel = obj_load("models/cube.obj");
     ent->texture = LoadSprite("models/smoke.png",512,512);
     vec3d_cpy(ent->body.position,position);
 	ent->rotation.x = 90;
@@ -76,7 +80,7 @@ void touch_callback(void *data, void *context) //function for objects touching
     //mgl_callback_set(&ent->body.touch,touch_callback,ent);
 	ent->type = ENTITYTYPE_PARTICLE;
     return ent;
-}*/
+}
 
 Entity *newCube(Vec3D position)//creates object
 {
@@ -111,7 +115,7 @@ Entity *newPlayer(Vec3D position)//creates object
     }
     ent->objModel = obj_load("models/player.obj");
     //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-	ent->camera_independent = 1;
+	//ent->camera_independent = 1;
     vec3d_cpy(ent->body.position,position);
 	ent->rotation.x = 90;
 	ent->rotation.y = 0;
@@ -343,6 +347,270 @@ Entity *newAmmo3(Vec3D position)//creates object
     return ent;
 }
 
+Entity *newAmmo4(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/ammo.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newAmmo5(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/ammo.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newAmmo6(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/ammo.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newAmmo7(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/ammo.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newAmmo8(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/ammo.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newAmmo9(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/ammo.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newAmmo10(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/ammo.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newAmmo11(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/ammo.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newAmmo12(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/ammo.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newAmmo13(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/ammo.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newAmmo14(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/ammo.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newAmmo15(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/ammo.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
 Entity *newDrone(Vec3D position, const char *name)//creates object
 {
     Entity * ent;
@@ -355,7 +623,7 @@ Entity *newDrone(Vec3D position, const char *name)//creates object
     //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
     vec3d_cpy(ent->body.position,position);
 	ent->rotation.x = 90;
-	ent->rotation.y = 180;
+	ent->rotation.y = 90;
 	ent->scale.x = 1.5;
 	ent->scale.y = 1.5;
 	ent->scale.z = 1.5;
@@ -443,10 +711,10 @@ Entity *newTurret1(Vec3D position, const char *name)//creates object
     //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
     vec3d_cpy(ent->body.position,position);
 	ent->rotation.x = 90;
-	ent->rotation.y = -90;
-	ent->scale.x = 3;
-	ent->scale.y = 3;
-	ent->scale.z = 3;
+	ent->rotation.y = 0;
+	ent->scale.x = 1;
+	ent->scale.y = 1;
+	ent->scale.z = 1;
     cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
     sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
@@ -752,12 +1020,12 @@ int main(int argc, char *argv[])
     int i;
     float r = 0;
     Space *space;
-    Entity *cube,*smoke,*player,*current_weapon,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3, *drone1, *drone2, *drone3, *drone4, *turret1, *turret2, *turret3, *turret4, *turret5, *turret6, *turret7, *soldier1, *soldier2, *soldier3, *soldier4, *soldier5, *soldier6, *soldier7;
+    Entity *cube,*smoke,*player,*current_weapon,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3,*ammo4,*ammo5,*ammo6, *ammo7, *ammo8, *ammo9, *ammo10, *ammo11, *ammo12, *ammo13, *ammo14, *ammo15, *drone1, *drone2, *drone3, *drone4, *turret1, *turret2, *turret3, *turret4, *turret5, *turret6, *turret7, *soldier1, *soldier2, *soldier3, *soldier4, *soldier5, *soldier6, *soldier7;
     char bGameLoopRunning = 1;
-    Vec3D cameraPosition = {130,-20,0.3}; //set initial camera position
-    Vec3D cameraRotation = {90,0,90};    //set initial rotation
+    Vec3D cameraPosition = {100,-110,0.1}; //set initial camera position
+    Vec3D cameraRotation = {90,0,0};    //set initial rotation
     SDL_Event e;
-    Obj /**obj,*/ *bgobj;
+    Obj *obj, *bgobj;
     Sprite /**texture,*/ *bgtext;
     
     init_logger("gametest3d.log");
@@ -772,18 +1040,18 @@ int main(int argc, char *argv[])
 	//obj = obj_load("models/cube.obj");
 	//texture = LoadSprite("models/cube_text.png",1024,1024);
     
-    bgobj = obj_load("models/maya_cube.obj");
-    bgtext = LoadSprite("models/Solid_blue.svg.png",1024,1024);
+    bgobj = obj_load("models/maze.obj");
+    bgtext = LoadSprite("models/Solid_blue.png",1024,1024);
 
-	player = newPlayer(vec3d(1.0f,1.0f,1.0f));
+	//player = newPlayer(vec3d(80,-20,-6));
 	//player->camera_independent = 1;
 
-	//smoke = newSmoke(vec3d(80,-20,2));
+	smoke = newSmoke(vec3d(80,-20,2));
 	
-	//cube = newCube(vec3d(0.3f,-2.0f,-3.0f));
-	//cube->hidden = 1;
+	cube = newCube(vec3d(1.3f,-2.0f,-3.0f));
+	cube->camera_independent = 1;
 
-	pistol = newPistol(vec3d(0.3f,-2.0f,-3.0f));
+	pistol = newPistol(vec3d(1.3f,-2.0f,-3.0f));
 	assault = newAssault(vec3d(3.0f,-4.0f,-1.0f)); 
 	shotgun = newShotgun(vec3d(0.0f,-3.0f,-4.0f));
 	smg = newSmg(vec3d(1.5f,-3.0f,-6.0f));
@@ -796,43 +1064,56 @@ int main(int argc, char *argv[])
 	smg->hidden = 1;
 	
 
-	health = newHealth(vec3d(-5,-29,-6));
-	health2 = newHealth(vec3d(-120,-95,-6));
-	health3 = newHealth(vec3d(5,-122,-6));
+	health = newHealth(vec3d(100,-90,-4));
+	health2 = newHealth(vec3d(100,-80,-4));
+	health3 = newHealth(vec3d(100,-70,-4));
 
-	ammo = newAmmo(vec3d(20,60,-6));    
-	ammo2 = newAmmo(vec3d(-60,100,-6));  
-	ammo3 = newAmmo(vec3d(-60,-160,-6));  
+	ammo = newAmmo(vec3d(100,-60,-5));    
+	ammo2 = newAmmo(vec3d(100,-50,-5));  
+	ammo3 = newAmmo(vec3d(100,-40,-5)); 
+	ammo4 = newAmmo(vec3d(100,-30,-5)); 
+	ammo5 = newAmmo(vec3d(100,-20,-5)); 
+	ammo6 = newAmmo(vec3d(90,-20,-5)); 
+	ammo7 = newAmmo(vec3d(80,-20,-5)); 
+	ammo8 = newAmmo(vec3d(70,-20,-5)); 
+	ammo9 = newAmmo(vec3d(60,-20,-5)); 
+	ammo10 = newAmmo(vec3d(50,-20,-5)); 
+	ammo11 = newAmmo(vec3d(40,-20,-5)); 
+	ammo12 = newAmmo(vec3d(30,-20,-5)); 
+	ammo13 = newAmmo(vec3d(20,-20,-5)); 
+	ammo14 = newAmmo(vec3d(10,-20,-5)); 
+	ammo15 = newAmmo(vec3d(40,-80,-5)); 
 
-	drone1 = newDrone(vec3d(-10,55,-1),"drone"); //+forward/-back, -left/+right, +up/-down
-	drone2 = newDrone2(vec3d(-10,-90,1),"drone");
-	drone3 = newDrone3(vec3d(-60,-80,1),"drone");
-    drone4 = newDrone4(vec3d(-90,-50,1),"drone");
+	drone1 = newDrone(vec3d(50,-60,-5),"drone"); //+forward/-back, -left/+right, +up/-down
+	drone2 = newDrone2(vec3d(-100,-100,-5),"drone");
+	drone3 = newDrone3(vec3d(-90,-20,-5),"drone");
+    drone4 = newDrone4(vec3d(-90,0,-5),"drone");
 
-    turret1 = newTurret1(vec3d(75,-3,-9.3),"turret");
-	turret2 = newTurret2(vec3d(135,100,-9.3),"turret");
+    turret1 = newTurret1(vec3d(-10,90,-3),"turret");
+	/*turret2 = newTurret2(vec3d(135,100,-9.3),"turret");
 	turret3 = newTurret3(vec3d(-45,-60,-9.3),"turret");
 	turret4 = newTurret4(vec3d(-45,0,-9.3),"turret");
 	turret5 = newTurret5(vec3d(-133,90,-9.3),"turret");
 	turret6 = newTurret6(vec3d(-133,20,-9.3),"turret");
-	turret7 = newTurret7(vec3d(-90,-159,-9.3),"turret");
+	turret7 = newTurret7(vec3d(-90,-159,-9.3),"turret");*/
 
-	soldier1 = newSoldier1(vec3d(135,-150,-10.6),"soldier");
+	/*soldier1 = newSoldier1(vec3d(135,-150,-10.6),"soldier");
 	soldier2 = newSoldier2(vec3d(135,-75,-10.6),"soldier");
 	soldier3 = newSoldier3(vec3d(70,-150,-10.6),"soldier");
 	soldier4 = newSoldier4(vec3d(5,-150,-10.6),"soldier");
 	soldier5 = newSoldier5(vec3d(-47,85,-10.6),"soldier");
 	soldier6 = newSoldier6(vec3d(-33,35,-10.3),"soldier");
-	soldier7 = newSoldier7(vec3d(-120,-159,-10.6),"soldier");
+	soldier7 = newSoldier7(vec3d(-120,-159,-10.6),"soldier");*/
     
     //cube2->body.velocity.x = -0.1; //move cube2 0.1 units left
-	soldier1->body.velocity.y = 0.1;
-	soldier2->body.velocity.y = -0.1;
+	//soldier1->body.velocity.y = 0.1;
+	//soldier2->body.velocity.y = -0.1;
+	//player->body.velocity.y = 5;
     
     space = space_new();
     space_set_steps(space,100);
 
-	space_add_body(space,&player->body);
+	//space_add_body(space,&player->body);
 
 	//space_add_body(space,&cube->body);
 
@@ -848,13 +1129,16 @@ int main(int argc, char *argv[])
 	space_add_body(space,&ammo->body);
 	space_add_body(space,&ammo2->body);
 	space_add_body(space,&ammo3->body);
+	space_add_body(space,&ammo4->body);
+	space_add_body(space,&ammo5->body);
+	space_add_body(space,&ammo6->body);
 
-	space_add_body(space,&drone1->body);
+	/*space_add_body(space,&drone1->body);
 	space_add_body(space,&drone2->body);
 	space_add_body(space,&drone3->body);
-	space_add_body(space,&drone4->body);
+	space_add_body(space,&drone4->body);*/
 
-	space_add_body(space,&turret1->body);
+	/*space_add_body(space,&turret1->body);
 	space_add_body(space,&turret2->body);
 	space_add_body(space,&turret3->body);
 	space_add_body(space,&turret4->body);
@@ -868,7 +1152,7 @@ int main(int argc, char *argv[])
 	space_add_body(space,&soldier4->body);
 	space_add_body(space,&soldier5->body);
 	space_add_body(space,&soldier6->body);
-	space_add_body(space,&soldier7->body);
+	space_add_body(space,&soldier7->body);*/
 
     while (bGameLoopRunning)
     {
@@ -888,6 +1172,10 @@ int main(int argc, char *argv[])
                 {
                     bGameLoopRunning = 0;
                 }
+				else if (e.key.keysym.sym == SDLK_b)
+				{
+					bbon = 1;
+				}
                 else if (e.key.keysym.sym == SDLK_SPACE)//move camera up
                 {
                     cameraPosition.z++;
@@ -1013,14 +1301,14 @@ int main(int argc, char *argv[])
 
 			/*if mouse button is pressed. If player fires, spawn bullet(cube) and move it forward*/
 			if (e.type == SDL_MOUSEBUTTONDOWN){
-				cube = newCube(vec3d(
-					cameraPosition.x-WEAPON_OFFSET*cos(cameraRotation.z*PI/180),
-					cameraPosition.y+WEAPON_OFFSET*sin(cameraRotation.z*PI/180),
-					cameraPosition.z-WEAPON_OFFSET*16));
+				cube = newCube(vec3d(                                            //create new cube
+					cameraPosition.x - WEAPON_OFFSET*cos(cameraRotation.z*PI/180), //spawn cube in front of gun barrel
+					cameraPosition.y + WEAPON_OFFSET*sin(cameraRotation.z*PI/180),
+					cameraPosition.z - WEAPON_OFFSET*16));//16; move bullet up/down
 				space_add_body(space,&cube->body);
-				cube->body.velocity.x = -10.9*sin(cameraRotation.z*PI/180); 
-				cube->body.velocity.y = 10.9*cos(cameraRotation.z*PI/180);
-
+				cube->body.velocity.x = -11.9*sin(cameraRotation.z*PI/180); //move cube from gun barrel based on rotation, keeps cube moving in center of gun barrel
+				cube->body.velocity.y = 11.9*cos(cameraRotation.z*PI/180);//11.9, move bullet based on camera rotation
+				//cube->body.velocity.z = 10.9*cos(cameraRotation.z*PI/180);
 				//cube->camera_independent = 1;
 				slog("fire");
 			}
@@ -1042,7 +1330,7 @@ int main(int argc, char *argv[])
             bgobj,
             vec3d(0,0,-10),//0,0,-10
             vec3d(90,90,0),
-            vec3d(5,5,5),//5,5,5
+            vec3d(15,15,15),//5,5,5
             vec4d(1,1,1,1),
             bgtext
         );

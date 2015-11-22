@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "obj.h"
 #include "simple_logger.h"
+#include "math.h"
 
 #define __obj_max 1024
 
@@ -552,6 +553,5 @@ Model *obj_load_model(char *filename)
     
     return model;
 }
-
 
 /*eol@eof*/

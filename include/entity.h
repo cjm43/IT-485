@@ -1,5 +1,5 @@
-#ifndef __OBJECT_H__
-#define __OBJECT_H__
+#ifndef __ENTITY_H__
+#define __ENTITY_H__
 
 #include "obj.h"
 #include "vector.h"

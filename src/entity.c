@@ -93,7 +93,7 @@ void entity_draw(Entity *ent)
 	switch(ent->type)
 	{
 	case ENTITYTYPE_PARTICLE:
-	    particle_draw(ent->position, ent->scale, ent->texture, 16);
+	   // particle_draw(ent->position, ent->scale, ent->texture, 16);
 		break;
 
 	default:
@@ -118,7 +118,7 @@ int entity_is_entity(void *data)
     return 1;
 }
 
-void drawBB(Entity *ent)
+/*void drawBB(Entity *ent)
 {
 	int tris[36] = 
 					{1,0,2,  //create triangles
@@ -138,7 +138,7 @@ void drawBB(Entity *ent)
 	float y = ent->body.bounds.y+ent->body.position.y;
 	float z = ent->body.bounds.z+ent->body.position.z;
 
-	/*set bounding box for width,height and depth*/
+	/*set bounding box for width,height and depth
 	float w = ent->body.bounds.w;     
 	float h = ent->body.bounds.h;
 	float d = ent->body.bounds.d;
@@ -221,7 +221,7 @@ void drawBB(Entity *ent)
 	//slog("%s bb (%f,%f,%f,%f,%f,%f)\n",ent->name,x,y,z,ent->body.bounds.w,ent->body.bounds.h,ent->body.bounds.d);
 	glPopMatrix();
 }
-
+*/
 /*eol@eof*/
 
 

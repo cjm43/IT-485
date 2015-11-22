@@ -18,7 +18,7 @@ typedef struct Entity_S
     int type;
 	char name[128];
     Vec3D acceleration;
-	Vec3D position;
+	//Vec3D position;
     Vec3D rotation;
     Vec3D scale;
 	Vec3D velocity;

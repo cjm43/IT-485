@@ -37,12 +37,12 @@ int bbon = 0;
 
 void touch_callback(void *data, void *context) //function for objects touching
 {
-    Entity *me,*other, *soldier1, *soldier2, *ammo, *health;
+    Entity *me,*other, *ammo, *health, *player;
     Body *obody;
     if ((!data)||(!context))return;
-    soldier1 = (Entity *)data;
+    player = (Entity *)data;
 	//player = (Entity *)data;
-	soldier1->body.velocity = vec3d(-soldier1->body.velocity.x,-soldier1->body.velocity.y,-soldier1->body.velocity.z);
+	//soldier1->body.velocity = vec3d(-soldier1->body.velocity.x,-soldier1->body.velocity.y,-soldier1->body.velocity.z);
 	//player->body.velocity = vec3d(-player->body.velocity.x,-player->body.velocity.y,-player->body.velocity.z);
     obody = (Body *)context;
     if (entity_is_entity(obody->touch.data)) //if entites are touching
@@ -53,7 +53,7 @@ void touch_callback(void *data, void *context) //function for objects touching
 		/*Health and ammo pickup disappear when touched*/
 		entity_free(ammo);
 		entity_free(health);
-		//soldier2->body.velocity = vec3d(-soldier2->body.velocity.x,-soldier2->body.velocity.y,-soldier2->body.velocity.z);
+		player->body.velocity = vec3d(0,0,0);
     }
     //slog("touching me.... touching youuuuuuuu");
 }
@@ -699,6 +699,29 @@ Entity *newDrone4(Vec3D position, const char *name)//creates object
     return ent;
 }
 
+Entity *newDrone5(Vec3D position, const char *name)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/drone.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 190;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+
 Entity *newTurret1(Vec3D position, const char *name)//creates object
 {
     Entity * ent;
@@ -712,141 +735,9 @@ Entity *newTurret1(Vec3D position, const char *name)//creates object
     vec3d_cpy(ent->body.position,position);
 	ent->rotation.x = 90;
 	ent->rotation.y = 0;
-	ent->scale.x = 1;
-	ent->scale.y = 1;
-	ent->scale.z = 1;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
-Entity *newTurret2(Vec3D position, const char *name)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/turret.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	ent->rotation.x = 90;
-	ent->rotation.y = 90;
-	ent->scale.x = 3;
-	ent->scale.y = 3;
-	ent->scale.z = 3;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
-Entity *newTurret3(Vec3D position, const char *name)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/turret.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	ent->rotation.x = 90;
-	ent->rotation.y = 180;
-	ent->scale.x = 3;
-	ent->scale.y = 3;
-	ent->scale.z = 3;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
-Entity *newTurret4(Vec3D position, const char *name)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/turret.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	ent->rotation.x = 90;
-	ent->rotation.y = 180;
-	ent->scale.x = 3;
-	ent->scale.y = 3;
-	ent->scale.z = 3;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
-Entity *newTurret5(Vec3D position, const char *name)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/turret.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	ent->rotation.x = 90;
-	ent->rotation.y = 180;
-	ent->scale.x = 3;
-	ent->scale.y = 3;
-	ent->scale.z = 3;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
-Entity *newTurret6(Vec3D position, const char *name)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/turret.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	ent->rotation.x = 90;
-	ent->rotation.y = 180;
-	ent->scale.x = 3;
-	ent->scale.y = 3;
-	ent->scale.z = 3;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
-Entity *newTurret7(Vec3D position, const char *name)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/turret.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	ent->rotation.x = 90;
-	ent->rotation.y = -90;
-	ent->scale.x = 3;
-	ent->scale.y = 3;
-	ent->scale.z = 3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
     cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
     sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
@@ -876,154 +767,15 @@ Entity *newSoldier1(Vec3D position, const char *name)//creates object
     return ent;
 }
 
-Entity *newSoldier2(Vec3D position, const char *name)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/soldier.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	//vec3d_cpy(ent->body.rotation,rotation);
-	ent->rotation.x = 90;
-	ent->rotation.y = 0;
-	ent->scale.x = 3;
-	ent->scale.y = 3;
-	ent->scale.z = 3;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
-Entity *newSoldier3(Vec3D position, const char *name)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/soldier.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	//vec3d_cpy(ent->body.rotation,rotation);
-	ent->rotation.x = 90;
-	ent->rotation.y = 160;
-	ent->scale.x = 3;
-	ent->scale.y = 3;
-	ent->scale.z = 3;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
-Entity *newSoldier4(Vec3D position, const char *name)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/soldier.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	//vec3d_cpy(ent->body.rotation,rotation);
-	ent->rotation.x = 90;
-	ent->rotation.y = 90;
-	ent->scale.x = 3;
-	ent->scale.y = 3;
-	ent->scale.z = 3;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
-Entity *newSoldier5(Vec3D position, const char *name)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/soldier.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	//vec3d_cpy(ent->body.rotation,rotation);
-	ent->rotation.x = 90;
-	ent->rotation.y = 70;
-	ent->scale.x = 3;
-	ent->scale.y = 3;
-	ent->scale.z = 3;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
-Entity *newSoldier6(Vec3D position, const char *name)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/soldier.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	//vec3d_cpy(ent->body.rotation,rotation);
-	ent->rotation.x = 90;
-	ent->rotation.y = 90;
-	ent->scale.x = 3;
-	ent->scale.y = 3;
-	ent->scale.z = 3;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
-Entity *newSoldier7(Vec3D position, const char *name)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/soldier.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	//vec3d_cpy(ent->body.rotation,rotation);
-	ent->rotation.x = 90;
-	ent->rotation.y = 150;
-	ent->scale.x = 3;
-	ent->scale.y = 3;
-	ent->scale.z = 3;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
 
 int main(int argc, char *argv[])
 {
     int i;
     float r = 0;
     Space *space;
-    Entity *cube,*smoke,*player,*current_weapon,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3,*ammo4,*ammo5,*ammo6, *ammo7, *ammo8, *ammo9, *ammo10, *ammo11, *ammo12, *ammo13, *ammo14, *ammo15, *drone1, *drone2, *drone3, *drone4, *turret1, *turret2, *turret3, *turret4, *turret5, *turret6, *turret7, *soldier1, *soldier2, *soldier3, *soldier4, *soldier5, *soldier6, *soldier7;
+    Entity *cube,*smoke,*player,*current_weapon,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3,*ammo4,*ammo5,*ammo6, *ammo7, *ammo8, *ammo9, *ammo10, *ammo11, *ammo12, *ammo13, *ammo14, *ammo15, *drone1, *drone2, *drone3, *drone4, *drone5;
     char bGameLoopRunning = 1;
-    Vec3D cameraPosition = {100,-110,0.1}; //set initial camera position
-    Vec3D cameraRotation = {90,0,0};    //set initial rotation
+    
     SDL_Event e;
     Obj *obj, *bgobj;
     Sprite /**texture,*/ *bgtext;
@@ -1043,7 +795,9 @@ int main(int argc, char *argv[])
     bgobj = obj_load("models/maze.obj");
     bgtext = LoadSprite("models/Solid_blue.png",1024,1024);
 
-	//player = newPlayer(vec3d(80,-20,-6));
+	player = newPlayer(vec3d(80,-20,-6));
+	player->body.position = vec3d(100,-110,0.1); //set initial camera position
+    player->rotation = vec3d(90,0,0);    //set initial rotation
 	//player->camera_independent = 1;
 
 	smoke = newSmoke(vec3d(80,-20,2));
@@ -1051,17 +805,17 @@ int main(int argc, char *argv[])
 	cube = newCube(vec3d(1.3f,-2.0f,-3.0f));
 	cube->camera_independent = 1;
 
-	pistol = newPistol(vec3d(1.3f,-2.0f,-3.0f));
+	/*pistol = newPistol(vec3d(1.3f,-2.0f,-3.0f));
 	assault = newAssault(vec3d(3.0f,-4.0f,-1.0f)); 
 	shotgun = newShotgun(vec3d(0.0f,-3.0f,-4.0f));
-	smg = newSmg(vec3d(1.5f,-3.0f,-6.0f));
+	smg = newSmg(vec3d(1.5f,-3.0f,-6.0f));*/
 
-	current_weapon = pistol;
+	/*current_weapon = pistol;
 	pistol->hidden = 0;
 	pistol->camera_independent = 1;
 	assault->hidden = 1;
 	shotgun->hidden = 1;
-	smg->hidden = 1;
+	smg->hidden = 1;*/
 	
 
 	health = newHealth(vec3d(100,-90,-4));
@@ -1088,8 +842,9 @@ int main(int argc, char *argv[])
 	drone2 = newDrone2(vec3d(-100,-100,-5),"drone");
 	drone3 = newDrone3(vec3d(-90,-20,-5),"drone");
     drone4 = newDrone4(vec3d(-90,0,-5),"drone");
+	drone4 = newDrone4(vec3d(-10,90,-5),"drone");
 
-    turret1 = newTurret1(vec3d(-10,90,-3),"turret");
+    //turret1 = newTurret1(vec3d(-10,90,-3),"turret");
 	/*turret2 = newTurret2(vec3d(135,100,-9.3),"turret");
 	turret3 = newTurret3(vec3d(-45,-60,-9.3),"turret");
 	turret4 = newTurret4(vec3d(-45,0,-9.3),"turret");
@@ -1117,10 +872,10 @@ int main(int argc, char *argv[])
 
 	//space_add_body(space,&cube->body);
 
-    space_add_body(space,&assault->body);
+    /*space_add_body(space,&assault->body);
 	space_add_body(space,&pistol->body);
     space_add_body(space,&shotgun->body);
-	space_add_body(space,&smg->body);
+	space_add_body(space,&smg->body);*/
 
 	space_add_body(space,&health->body);
 	space_add_body(space,&health2->body);
@@ -1132,6 +887,15 @@ int main(int argc, char *argv[])
 	space_add_body(space,&ammo4->body);
 	space_add_body(space,&ammo5->body);
 	space_add_body(space,&ammo6->body);
+	space_add_body(space,&ammo7->body);
+	space_add_body(space,&ammo8->body);
+	space_add_body(space,&ammo9->body);
+	space_add_body(space,&ammo10->body);
+	space_add_body(space,&ammo11->body);
+	space_add_body(space,&ammo12->body);
+	space_add_body(space,&ammo13->body);
+	space_add_body(space,&ammo14->body);
+	space_add_body(space,&ammo15->body);
 
 	/*space_add_body(space,&drone1->body);
 	space_add_body(space,&drone2->body);
@@ -1178,71 +942,71 @@ int main(int argc, char *argv[])
 				}
                 else if (e.key.keysym.sym == SDLK_SPACE)//move camera up
                 {
-                    cameraPosition.z++;
+                    player->body.position.z++;
                 }
                 else if (e.key.keysym.sym == SDLK_z)//move camera down
                 {
-                    cameraPosition.z-= 2;
+                    player->body.position.z-= 2;
                 }
                 else if (e.key.keysym.sym == SDLK_w)//move forward
                 {
                     vec3d_add(
-                        cameraPosition,
-                        cameraPosition,
+                        player->body.position,
+                        player->body.position,
                         vec3d(
-                            -sin(cameraRotation.z * DEGTORAD),
-                            cos(cameraRotation.z * DEGTORAD),
+                            -sin(player->rotation.z * DEGTORAD),
+                            cos(player->rotation.z * DEGTORAD),
                             0
                         ));
                 }
                 else if (e.key.keysym.sym == SDLK_s)//move back
                 {
                     vec3d_add(
-                        cameraPosition,
-                        cameraPosition,
+                        player->body.position,
+                        player->body.position,
                         vec3d(
-                            sin(cameraRotation.z * DEGTORAD),
-                            -cos(cameraRotation.z * DEGTORAD),
+                            sin(player->rotation.z * DEGTORAD),
+                            -cos(player->rotation.z * DEGTORAD),
                             0
                         ));
                 }
                 else if (e.key.keysym.sym == SDLK_d)//move right
                 {
                     vec3d_add(
-                        cameraPosition,
-                        cameraPosition,
+                        player->body.position,
+                        player->body.position,
                         vec3d(
-                            cos(cameraRotation.z * DEGTORAD),
-                            sin(cameraRotation.z * DEGTORAD),
+                            cos(player->rotation.z * DEGTORAD),
+                            sin(player->rotation.z * DEGTORAD),
                             0
                         ));
                 }
                 else if (e.key.keysym.sym == SDLK_a)//move left
                 {
                     vec3d_add(
-                        cameraPosition,
-                        cameraPosition,
+                        player->body.position,
+                        player->body.position,
                         vec3d(
-                            -cos(cameraRotation.z * DEGTORAD),
-                            -sin(cameraRotation.z * DEGTORAD),
+                            -cos(player->rotation.z * DEGTORAD),
+                            -sin(player->rotation.z * DEGTORAD),
                             0
                         ));
                 }
                 else if (e.key.keysym.sym == SDLK_LEFT)
                 {
-                    cameraRotation.z += 15;
+                    player->rotation.z += 15;
                 }
                 else if (e.key.keysym.sym == SDLK_RIGHT)
                 {
-                    cameraRotation.z -= 15;
+                    player->rotation.z -= 15;
                 }
                 else if (e.key.keysym.sym == SDLK_UP)
                 {
-                    cameraRotation.x += 15;
+                    player->rotation.x += 15;
                 }
                 else if (e.key.keysym.sym == SDLK_DOWN)
                 {
-                    cameraRotation.x -= 15;
+                    player->rotation.x -= 15;
                 }
             }
 
@@ -1286,29 +1050,29 @@ int main(int argc, char *argv[])
 
 			if (e.type == SDL_MOUSEMOTION){  //move based on window size (1024,768); set safe bounding box (512x384)
 				if(e.motion.x < 412){       //if camera is less than 412 
-					cameraRotation.z += 3; //down
+					player->rotation.z += 3; //down
 				}
 				else if(e.motion.x > 612){
-					cameraRotation.z -= 3;//up
+					player->rotation.z -= 3;//up
 				}
 				if(e.motion.y < 284){
-					cameraRotation.x += 3; //right
+					player->rotation.x += 3; //right
 				}
 				else if (e.motion.y > 484){
-					cameraRotation.x -= 3;  //left
+					player->rotation.x -= 3;  //left
 				}
 			}
 
 			/*if mouse button is pressed. If player fires, spawn bullet(cube) and move it forward*/
 			if (e.type == SDL_MOUSEBUTTONDOWN){
 				cube = newCube(vec3d(                                            //create new cube
-					cameraPosition.x - WEAPON_OFFSET*cos(cameraRotation.z*PI/180), //spawn cube in front of gun barrel
-					cameraPosition.y + WEAPON_OFFSET*sin(cameraRotation.z*PI/180),
-					cameraPosition.z - WEAPON_OFFSET*16));//16; move bullet up/down
+					player->body.position.x - WEAPON_OFFSET*cos(player->rotation.z*PI/180), //spawn cube in front of gun barrel
+					player->body.position.y + WEAPON_OFFSET*sin(player->rotation.z*PI/180),
+					player->body.position.z - WEAPON_OFFSET*16));//16; move bullet up/down
 				space_add_body(space,&cube->body);
-				cube->body.velocity.x = -11.9*sin(cameraRotation.z*PI/180); //move cube from gun barrel based on rotation, keeps cube moving in center of gun barrel
-				cube->body.velocity.y = 11.9*cos(cameraRotation.z*PI/180);//11.9, move bullet based on camera rotation
-				//cube->body.velocity.z = 10.9*cos(cameraRotation.z*PI/180);
+				cube->body.velocity.x = -11.9*sin(player->rotation.z*PI/180); //move cube from gun barrel based on rotation, keeps cube moving in center of gun barrel
+				cube->body.velocity.y = 11.9*cos(player->rotation.z*PI/180);//11.9, move bullet based on camera rotation
+				//cube->body.velocity.z = 10.9*cos(player->rotation.z*PI/180);
 				//cube->camera_independent = 1;
 				slog("fire");
 			}
@@ -1321,8 +1085,8 @@ int main(int argc, char *argv[])
 		entity_draw_all(0); //draw entities not depedent on camera weapons(enemies,level)
 
 		set_camera(
-            cameraPosition,
-            cameraRotation);
+			player->body.position,
+            player->rotation );
         
         entity_draw_all(1);  //draw entities dependent on camera (gun,projectile)
 

@@ -41,19 +41,20 @@ void touch_callback(void *data, void *context) //function for objects touching
     Body *obody;
     if ((!data)||(!context))return;
     player = (Entity *)data;
-	//player = (Entity *)data;
+    health = (Entity *)data;
+	ammo = (Entity *)data;
 	//soldier1->body.velocity = vec3d(-soldier1->body.velocity.x,-soldier1->body.velocity.y,-soldier1->body.velocity.z);
 	//player->body.velocity = vec3d(-player->body.velocity.x,-player->body.velocity.y,-player->body.velocity.z);
     obody = (Body *)context;
     if (entity_is_entity(obody->touch.data)) //if entites are touching
     {
-		/*have cube2 move right after touching cube1*/
-        ammo = (Entity *)obody->touch.data;
+        //ammo = (Entity *)obody->touch.data;
 		health = (Entity *)obody->touch.data;
 		/*Health and ammo pickup disappear when touched*/
-		entity_free(ammo);
-		entity_free(health);
-		player->body.velocity = vec3d(0,0,0);
+		//entity_free(ammo);
+		//entity_free(health);
+		//health->body.velocity = vec3d(-health->body.velocity.x,-health->body.velocity.y,-health->body.velocity.z);
+		player->body.velocity.y = 0;
     }
     //slog("touching me.... touching youuuuuuuu");
 }
@@ -113,7 +114,7 @@ Entity *newPlayer(Vec3D position)//creates object
     {
         return NULL;
     }
-    ent->objModel = obj_load("models/player.obj");
+    //ent->objModel = obj_load("models/player.obj");
     //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
 	//ent->camera_independent = 1;
     vec3d_cpy(ent->body.position,position);
@@ -122,7 +123,7 @@ Entity *newPlayer(Vec3D position)//creates object
 	ent->scale.x = 3;
 	ent->scale.y = 3.5;
 	ent->scale.z = 3;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    cube_set(ent->body.bounds,-2,-2,-2,3,3,3);
     //sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
     return ent;
@@ -650,7 +651,7 @@ Entity *newDrone2(Vec3D position, const char *name)//creates object
 	ent->scale.y = 1.5;
 	ent->scale.z = 1.5;
     cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    sprintf(ent->name,"%s",name);
+    //sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
     return ent;
 }
@@ -720,7 +721,6 @@ Entity *newDrone5(Vec3D position, const char *name)//creates object
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
     return ent;
 }
-
 
 Entity *newTurret1(Vec3D position, const char *name)//creates object
 {
@@ -861,9 +861,9 @@ int main(int argc, char *argv[])
 	soldier7 = newSoldier7(vec3d(-120,-159,-10.6),"soldier");*/
     
     //cube2->body.velocity.x = -0.1; //move cube2 0.1 units left
-	//soldier1->body.velocity.y = 0.1;
-	//soldier2->body.velocity.y = -0.1;
-	//player->body.velocity.y = 5;
+	health->body.velocity.y = 0.1;
+	health2->body.velocity.y = -0.1;
+	//player->body.velocity.y = 0;
     
     space = space_new();
     space_set_steps(space,100);
@@ -876,6 +876,8 @@ int main(int argc, char *argv[])
 	space_add_body(space,&pistol->body);
     space_add_body(space,&shotgun->body);
 	space_add_body(space,&smg->body);*/
+
+	space_add_body(space,&player->body);
 
 	space_add_body(space,&health->body);
 	space_add_body(space,&health2->body);
@@ -1011,40 +1013,40 @@ int main(int argc, char *argv[])
             }
 
 			/*player weapon switch. need to remove equipped weapon when switching*/
-			if (e.type == SDL_KEYDOWN){
-				if (e.key.keysym.sym == SDLK_1){
-					current_weapon->hidden = 1;
-					pistol->hidden = 0;
-					current_weapon = pistol;
-	                pistol->camera_independent = 1;
-					//space_add_body(space,&pistol->body);
-					slog("pistol");
-				}
-				else if (e.key.keysym.sym == SDLK_2){
-					current_weapon->hidden = 1;
-					assault->hidden = 0;
-					current_weapon = assault;
-	                assault->camera_independent = 1;
-					//space_add_body(space,&assault->body);
-					slog("assault rifle");
-				}
-				else if (e.key.keysym.sym == SDLK_3){
-					current_weapon->hidden = 1;
-					smg->hidden = 0;
-					current_weapon = smg;
-	                smg->camera_independent = 1;
-					//space_add_body(space,&smg->body);
-					slog("smg");
-				}
-				else if (e.key.keysym.sym == SDLK_4){
-					current_weapon->hidden = 1;
-					shotgun->hidden = 0;
-					current_weapon = shotgun;
-	                shotgun->camera_independent = 1;
-				   //space_add_body(space,&shotgun->body);
-					slog("shotgun");
-				}
-			}
+			//if (e.type == SDL_KEYDOWN){
+			//	if (e.key.keysym.sym == SDLK_1){
+			//		current_weapon->hidden = 1;
+			//		pistol->hidden = 0;
+			//		current_weapon = pistol;
+	  //              pistol->camera_independent = 1;
+			//		//space_add_body(space,&pistol->body);
+			//		slog("pistol");
+			//	}
+			//	else if (e.key.keysym.sym == SDLK_2){
+			//		current_weapon->hidden = 1;
+			//		assault->hidden = 0;
+			//		current_weapon = assault;
+	  //              assault->camera_independent = 1;
+			//		//space_add_body(space,&assault->body);
+			//		slog("assault rifle");
+			//	}
+			//	else if (e.key.keysym.sym == SDLK_3){
+			//		current_weapon->hidden = 1;
+			//		smg->hidden = 0;
+			//		current_weapon = smg;
+	  //              smg->camera_independent = 1;
+			//		//space_add_body(space,&smg->body);
+			//		slog("smg");
+			//	}
+			//	else if (e.key.keysym.sym == SDLK_4){
+			//		current_weapon->hidden = 1;
+			//		shotgun->hidden = 0;
+			//		current_weapon = shotgun;
+	  //              shotgun->camera_independent = 1;
+			//	   //space_add_body(space,&shotgun->body);
+			//		slog("shotgun");
+			//	}
+			//}
 
 			/*if mouse is moved*/
 
@@ -1064,18 +1066,18 @@ int main(int argc, char *argv[])
 			}
 
 			/*if mouse button is pressed. If player fires, spawn bullet(cube) and move it forward*/
-			if (e.type == SDL_MOUSEBUTTONDOWN){
-				cube = newCube(vec3d(                                            //create new cube
-					player->body.position.x - WEAPON_OFFSET*cos(player->rotation.z*PI/180), //spawn cube in front of gun barrel
-					player->body.position.y + WEAPON_OFFSET*sin(player->rotation.z*PI/180),
-					player->body.position.z - WEAPON_OFFSET*16));//16; move bullet up/down
-				space_add_body(space,&cube->body);
-				cube->body.velocity.x = -11.9*sin(player->rotation.z*PI/180); //move cube from gun barrel based on rotation, keeps cube moving in center of gun barrel
-				cube->body.velocity.y = 11.9*cos(player->rotation.z*PI/180);//11.9, move bullet based on camera rotation
-				//cube->body.velocity.z = 10.9*cos(player->rotation.z*PI/180);
-				//cube->camera_independent = 1;
-				slog("fire");
-			}
+			//if (e.type == SDL_MOUSEBUTTONDOWN){
+			//	cube = newCube(vec3d(                                            //create new cube
+			//		player->body.position.x - WEAPON_OFFSET*cos(player->rotation.z*PI/180), //spawn cube in front of gun barrel
+			//		player->body.position.y + WEAPON_OFFSET*sin(player->rotation.z*PI/180),
+			//		player->body.position.z - WEAPON_OFFSET*16));//16; move bullet up/down
+			//	space_add_body(space,&cube->body);
+			//	cube->body.velocity.x = -11.9*sin(player->rotation.z*PI/180); //move cube from gun barrel based on rotation, keeps cube moving in center of gun barrel
+			//	cube->body.velocity.y = 11.9*cos(player->rotation.z*PI/180);//11.9, move bullet based on camera rotation
+			//	//cube->body.velocity.z = 10.9*cos(player->rotation.z*PI/180);
+			//	//cube->camera_independent = 1;
+			//	slog("fire");
+			//}
         }
 
         graphics3d_frame_begin();
@@ -1120,6 +1122,12 @@ void set_camera(Vec3D position, Vec3D rotation)
 void hide_weapon(Entity* ent)//hide current weapon
 {
 	ent->hidden = 1;
+}
+
+void track_player(Entity* ent) //chase player when in range
+{
+	/*if player gets in range*/
+	/*follow until player is dead or out of range*/
 }
 
 /*eol@eof*/

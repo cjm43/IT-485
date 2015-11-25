@@ -2,8 +2,10 @@
 #include "space.h"
 #include "body.h"
 #include "simple_logger.h"
+#include "Entity.h"
 
 #include <glib.h>
+extern Entity *p1;
 
 struct Space_S
 {

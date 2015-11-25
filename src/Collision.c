@@ -91,13 +91,17 @@ int cube_cube_intersection(
     Cube a,
     Cube b)
 {
-    if ((a.x > b.x + b.w) || (b.x > a.x + a.w) || //if length of a.x is greater than length of b.x plus the width of b
-        (a.y > b.y + b.h) || (b.y > a.y + a.h) ||
-        (a.z > b.z + b.d) || (b.z > a.z + a.d))
-    {
-        return 0;  //intersection
-    }
-    return 1;
+    //if ((a.x > b.x + b.w) || (b.x > a.x + a.w) || //if length of a.x is greater than length of b.x plus the width of b
+    //    (a.y > b.y + b.h) || (b.y > a.y + a.h) ||
+    //    (a.z > b.z + b.d) || (b.z > a.z + a.d))
+    //{
+    //    return 0;  //no intersection
+    //}
+    //return 1; //intersection
+
+	 return (a.x+a.w >= b.x && a.x <= b.x+b.w) //if the x value plus width of a is greater than or equal to x value of b and x value of a is less than or equal to x value plus the width of b
+     && (a.y+a.h >= b.y && a.y <= b.y+b.h) //if y value plus height of a is greater than or equal to y value of b and y value of a is less than or equal to the y value plus the height of b
+     && (a.z+a.d >= b.z && a.z <= b.z+b.d); //if z value plus depth of a is greater than or equal to z value of b and z value of a is less than or equal to the z value plus the depth of b
 }
 
 /*eol@eof*/

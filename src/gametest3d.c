@@ -27,8 +27,9 @@
 #include "sprite.h"
 #include "entity.h"
 #include "space.h"
-//#include "object.h"
 #include  "math.h"
+
+Entity *p1;  //create global entity with pointer to memory address of p1
 
 #define PI 3.14159265
 #define WEAPON_OFFSET .0625 //1 divided by 2(double it if going up)
@@ -49,39 +50,40 @@ void touch_callback(void *data, void *context) //function for objects touching
     if (entity_is_entity(obody->touch.data)) //if entites are touching
     {
         //ammo = (Entity *)obody->touch.data;
+		//player = (Entity *)me->touch.data;
 		health = (Entity *)obody->touch.data;
 		/*Health and ammo pickup disappear when touched*/
-		//entity_free(ammo);
-		//entity_free(health);
+		entity_free(ammo);
+		entity_free(health);
 		//health->body.velocity = vec3d(-health->body.velocity.x,-health->body.velocity.y,-health->body.velocity.z);
-		player->body.velocity.y = 0;
+		//player->body.velocity.y = 0;
     }
     //slog("touching me.... touching youuuuuuuu");
 }
 
-Entity *newSmoke(Vec3D position)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-	ent->camera_independent = 1;
-    ent->objModel = obj_load("models/cube.obj");
-    ent->texture = LoadSprite("models/smoke.png",512,512);
-    vec3d_cpy(ent->body.position,position);
-	ent->rotation.x = 90;
-	ent->rotation.y = 180;
-	ent->scale.x = 0.5;
-	ent->scale.y = 0.5;
-	ent->scale.z = 0.5;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    //sprintf(ent->name,"%s",name);
-    //mgl_callback_set(&ent->body.touch,touch_callback,ent);
-	ent->type = ENTITYTYPE_PARTICLE;
-    return ent;
-}
+//Entity *newSmoke(Vec3D position)//creates object
+//{
+//    Entity * ent;
+//    ent = entity_new();
+//    if (!ent)
+//    {
+//        return NULL;
+//    }
+//	ent->camera_independent = 1;
+//    ent->objModel = obj_load("models/cube.obj");
+//    ent->texture = LoadSprite("models/smoke.png",512,512);
+//    vec3d_cpy(ent->body.position,position);
+//	ent->rotation.x = 90;
+//	ent->rotation.y = 180;
+//	ent->scale.x = 0.5;
+//	ent->scale.y = 0.5;
+//	ent->scale.z = 0.5;
+//    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+//    //sprintf(ent->name,"%s",name);
+//    //mgl_callback_set(&ent->body.touch,touch_callback,ent);
+//	ent->type = ENTITYTYPE_PARTICLE;
+//    return ent;
+//}
 
 Entity *newCube(Vec3D position)//creates object
 {
@@ -100,7 +102,7 @@ Entity *newCube(Vec3D position)//creates object
 	ent->scale.x = 0.3;
 	ent->scale.y = 0.3;
 	ent->scale.z = 0.3;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    cube_set(ent->body.bounds,0,0,0,1,1,1); //set bounding box x,y,z,w,h,d
     //sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
     return ent;
@@ -108,12 +110,17 @@ Entity *newCube(Vec3D position)//creates object
 
 Entity *newPlayer(Vec3D position)//creates object
 {
+
     Entity * ent;
+	char name[] = "player";
     ent = entity_new();
     if (!ent)
     {
         return NULL;
     }
+	p1=ent;
+	 //ent->objModel = obj_load("models/cube.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
     //ent->objModel = obj_load("models/player.obj");
     //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
 	//ent->camera_independent = 1;
@@ -123,8 +130,8 @@ Entity *newPlayer(Vec3D position)//creates object
 	ent->scale.x = 3;
 	ent->scale.y = 3.5;
 	ent->scale.z = 3;
-    cube_set(ent->body.bounds,-2,-2,-2,3,3,3);
-    //sprintf(ent->name,"%s",name);
+    cube_set(ent->body.bounds,-1,-1,-1,3,3,3);
+	sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
     return ent;
 }
@@ -232,7 +239,7 @@ Entity *newHealth(Vec3D position)//creates object
 	ent->scale.x = 1.5;
 	ent->scale.y = 1.5;
 	ent->scale.z = 1.5;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    cube_set(ent->body.bounds,1,1,3,2,2,2);
     //sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
     return ent;
@@ -795,12 +802,12 @@ int main(int argc, char *argv[])
     bgobj = obj_load("models/maze.obj");
     bgtext = LoadSprite("models/Solid_blue.png",1024,1024);
 
-	player = newPlayer(vec3d(80,-20,-6));
+	player = newPlayer(vec3d(100,-110,0.1));
 	player->body.position = vec3d(100,-110,0.1); //set initial camera position
     player->rotation = vec3d(90,0,0);    //set initial rotation
 	//player->camera_independent = 1;
 
-	smoke = newSmoke(vec3d(80,-20,2));
+	//smoke = newSmoke(vec3d(80,-20,2));
 	
 	cube = newCube(vec3d(1.3f,-2.0f,-3.0f));
 	cube->camera_independent = 1;
@@ -861,8 +868,8 @@ int main(int argc, char *argv[])
 	soldier7 = newSoldier7(vec3d(-120,-159,-10.6),"soldier");*/
     
     //cube2->body.velocity.x = -0.1; //move cube2 0.1 units left
-	health->body.velocity.y = 0.1;
-	health2->body.velocity.y = -0.1;
+	//health->body.velocity.y = -0.1;
+	//health2->body.velocity.y = -0.1;
 	//player->body.velocity.y = 0;
     
     space = space_new();
@@ -926,6 +933,7 @@ int main(int argc, char *argv[])
         {
             space_do_step(space);
         }
+		player->body.velocity=vec3d(0,0,0);
         while ( SDL_PollEvent(&e) ) 
         {
             if (e.type == SDL_QUIT)
@@ -952,63 +960,55 @@ int main(int argc, char *argv[])
                 }
                 else if (e.key.keysym.sym == SDLK_w)//move forward
                 {
-                    vec3d_add(
-                        player->body.position,
-                        player->body.position,
-                        vec3d(
-                            -sin(player->rotation.z * DEGTORAD),
-                            cos(player->rotation.z * DEGTORAD),
+                    
+                       player->body.velocity = vec3d(          //move player based on velocity
+                            .4*-sin(player->rotation.z * DEGTORAD),
+                            .4*cos(player->rotation.z * DEGTORAD),
                             0
-                        ));
+                        );
                 }
                 else if (e.key.keysym.sym == SDLK_s)//move back
                 {
-                    vec3d_add(
-                        player->body.position,
-                        player->body.position,
-                        vec3d(
-                            sin(player->rotation.z * DEGTORAD),
-                            -cos(player->rotation.z * DEGTORAD),
+                   
+                   player->body.velocity = vec3d(
+                            .4*sin(player->rotation.z * DEGTORAD),
+                            .4*-cos(player->rotation.z * DEGTORAD),
                             0
-                        ));
+                        );
                 }
                 else if (e.key.keysym.sym == SDLK_d)//move right
                 {
-                    vec3d_add(
-                        player->body.position,
-                        player->body.position,
-                        vec3d(
-                            cos(player->rotation.z * DEGTORAD),
-                            sin(player->rotation.z * DEGTORAD),
+                    
+					player->body.velocity = vec3d(
+                            .4*cos(player->rotation.z * DEGTORAD),
+                            .4*sin(player->rotation.z * DEGTORAD),
                             0
-                        ));
+                        );
                 }
                 else if (e.key.keysym.sym == SDLK_a)//move left
                 {
-                    vec3d_add(
-                        player->body.position,
-                        player->body.position,
-                        vec3d(
-                            -cos(player->rotation.z * DEGTORAD),
-                            -sin(player->rotation.z * DEGTORAD),
+                   
+					player->body.velocity = vec3d(
+                           .4*-cos(player->rotation.z * DEGTORAD),
+                           .4*-sin(player->rotation.z * DEGTORAD),
                             0
-                        ));
+                        );
                 }
                 else if (e.key.keysym.sym == SDLK_LEFT)
                 {
-                    player->rotation.z += 15;
+                    player->rotation.z += 20;
                 }
                 else if (e.key.keysym.sym == SDLK_RIGHT)
                 {
-                    player->rotation.z -= 15;
+                    player->rotation.z -= 20;
                 }
                 else if (e.key.keysym.sym == SDLK_UP)
                 {
-                    player->rotation.x += 15;
+                    player->rotation.x += 20;
                 }
                 else if (e.key.keysym.sym == SDLK_DOWN)
                 {
-                    player->rotation.x -= 15;
+                    player->rotation.x -= 20;
                 }
             }
 
@@ -1050,20 +1050,20 @@ int main(int argc, char *argv[])
 
 			/*if mouse is moved*/
 
-			if (e.type == SDL_MOUSEMOTION){  //move based on window size (1024,768); set safe bounding box (512x384)
-				if(e.motion.x < 412){       //if camera is less than 412 
-					player->rotation.z += 3; //down
-				}
-				else if(e.motion.x > 612){
-					player->rotation.z -= 3;//up
-				}
-				if(e.motion.y < 284){
-					player->rotation.x += 3; //right
-				}
-				else if (e.motion.y > 484){
-					player->rotation.x -= 3;  //left
-				}
-			}
+			//if (e.type == SDL_MOUSEMOTION){  //move based on window size (1024,768); set safe bounding box (512x384)
+			//	if(e.motion.x < 412){       //if camera is less than 412 
+			//		player->rotation.z += 3; //down
+			//	}
+			//	else if(e.motion.x > 612){
+			//		player->rotation.z -= 3;//up
+			//	}
+			//	if(e.motion.y < 284){
+			//		player->rotation.x += 3; //right
+			//	}
+			//	else if (e.motion.y > 484){
+			//		player->rotation.x -= 3;  //left
+			//	}
+			//}
 
 			/*if mouse button is pressed. If player fires, spawn bullet(cube) and move it forward*/
 			//if (e.type == SDL_MOUSEBUTTONDOWN){

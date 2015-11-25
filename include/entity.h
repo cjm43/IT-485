@@ -26,6 +26,7 @@ typedef struct Entity_S
     Obj *objModel;
     Sprite *texture;    /**<object texture*/
     Body body;
+	//MglCallback touch;
 	Uint8 camera_independent; //create objects that are not dependent on camera
 	Uint8 hidden; //hide entity
 }Entity;

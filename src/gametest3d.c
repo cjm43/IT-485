@@ -38,11 +38,13 @@ int bbon = 0;
 
 void touch_callback(void *data, void *context) //function for objects touching
 {
-    Entity *me,*other, *ammo, *health, *player;
+    Entity *me,*other, *ammo, *health, *health2, *player, *drone;
     Body *obody;
     if ((!data)||(!context))return;
     player = (Entity *)data;
+	drone = (Entity *)data;
     health = (Entity *)data;
+	health2 = (Entity *)data;
 	ammo = (Entity *)data;
 	//soldier1->body.velocity = vec3d(-soldier1->body.velocity.x,-soldier1->body.velocity.y,-soldier1->body.velocity.z);
 	//player->body.velocity = vec3d(-player->body.velocity.x,-player->body.velocity.y,-player->body.velocity.z);
@@ -52,9 +54,11 @@ void touch_callback(void *data, void *context) //function for objects touching
         //ammo = (Entity *)obody->touch.data;
 		//player = (Entity *)me->touch.data;
 		health = (Entity *)obody->touch.data;
+		health2 = (Entity *)obody->touch.data;
 		/*Health and ammo pickup disappear when touched*/
 		entity_free(ammo);
 		entity_free(health);
+		entity_free(health2);
 		//health->body.velocity = vec3d(-health->body.velocity.x,-health->body.velocity.y,-health->body.velocity.z);
 		//player->body.velocity.y = 0;
     }
@@ -136,92 +140,92 @@ Entity *newPlayer(Vec3D position)//creates object
     return ent;
 }
 
-Entity *newAssault(Vec3D position)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/Player_Gun.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	ent->rotation.x = 0;
-	ent->rotation.y = 90;
-	ent->rotation.z = 0;
-	ent->scale.x = 1;
-	ent->scale.y = 1;
-	ent->scale.z = 1;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    //sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
-Entity *newPistol(Vec3D position)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/pistol.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	ent->rotation.x = 0;
-	ent->rotation.y = -90;
-	//ent->rotation.z = 90;
-	ent->scale.x = 0.5;
-	ent->scale.y = 0.5;
-	ent->scale.z = 0.5;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    //sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
-Entity *newShotgun(Vec3D position)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/shotgun.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	ent->rotation.x = 0;
-	ent->rotation.y = -90;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    //sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
-
-Entity *newSmg(Vec3D position)//creates object
-{
-    Entity * ent;
-    ent = entity_new();
-    if (!ent)
-    {
-        return NULL;
-    }
-    ent->objModel = obj_load("models/smg.obj");
-    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
-    vec3d_cpy(ent->body.position,position);
-	ent->rotation.x = 0;
-	ent->rotation.y = 90;
-	ent->scale.x = 0.7;
-	ent->scale.y = 0.7;
-	ent->scale.z = 0.7;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
-    //sprintf(ent->name,"%s",name);
-    mgl_callback_set(&ent->body.touch,touch_callback,ent);
-    return ent;
-}
+//Entity *newAssault(Vec3D position)//creates object
+//{
+//    Entity * ent;
+//    ent = entity_new();
+//    if (!ent)
+//    {
+//        return NULL;
+//    }
+//    ent->objModel = obj_load("models/Player_Gun.obj");
+//    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+//    vec3d_cpy(ent->body.position,position);
+//	ent->rotation.x = 0;
+//	ent->rotation.y = 90;
+//	ent->rotation.z = 0;
+//	ent->scale.x = 1;
+//	ent->scale.y = 1;
+//	ent->scale.z = 1;
+//    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+//    //sprintf(ent->name,"%s",name);
+//    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+//    return ent;
+//}
+//
+//Entity *newPistol(Vec3D position)//creates object
+//{
+//    Entity * ent;
+//    ent = entity_new();
+//    if (!ent)
+//    {
+//        return NULL;
+//    }
+//    ent->objModel = obj_load("models/pistol.obj");
+//    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+//    vec3d_cpy(ent->body.position,position);
+//	ent->rotation.x = 0;
+//	ent->rotation.y = -90;
+//	//ent->rotation.z = 90;
+//	ent->scale.x = 0.5;
+//	ent->scale.y = 0.5;
+//	ent->scale.z = 0.5;
+//    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+//    //sprintf(ent->name,"%s",name);
+//    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+//    return ent;
+//}
+//
+//Entity *newShotgun(Vec3D position)//creates object
+//{
+//    Entity * ent;
+//    ent = entity_new();
+//    if (!ent)
+//    {
+//        return NULL;
+//    }
+//    ent->objModel = obj_load("models/shotgun.obj");
+//    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+//    vec3d_cpy(ent->body.position,position);
+//	ent->rotation.x = 0;
+//	ent->rotation.y = -90;
+//    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+//    //sprintf(ent->name,"%s",name);
+//    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+//    return ent;
+//}
+//
+//Entity *newSmg(Vec3D position)//creates object
+//{
+//    Entity * ent;
+//    ent = entity_new();
+//    if (!ent)
+//    {
+//        return NULL;
+//    }
+//    ent->objModel = obj_load("models/smg.obj");
+//    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+//    vec3d_cpy(ent->body.position,position);
+//	ent->rotation.x = 0;
+//	ent->rotation.y = 90;
+//	ent->scale.x = 0.7;
+//	ent->scale.y = 0.7;
+//	ent->scale.z = 0.7;
+//    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+//    //sprintf(ent->name,"%s",name);
+//    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+//    return ent;
+//}
 
 Entity *newHealth(Vec3D position)//creates object
 {
@@ -239,7 +243,7 @@ Entity *newHealth(Vec3D position)//creates object
 	ent->scale.x = 1.5;
 	ent->scale.y = 1.5;
 	ent->scale.z = 1.5;
-    cube_set(ent->body.bounds,1,1,3,2,2,2);
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
     //sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
     return ent;
@@ -261,7 +265,7 @@ Entity *newHealth2(Vec3D position)//creates object
 	ent->scale.x = 1.5;
 	ent->scale.y = 1.5;
 	ent->scale.z = 1.5;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
     //sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
     return ent;
@@ -283,7 +287,7 @@ Entity *newHealth3(Vec3D position)//creates object
 	ent->scale.x = 1.5;
 	ent->scale.y = 1.5;
 	ent->scale.z = 1.5;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
     //sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
     return ent;
@@ -305,7 +309,7 @@ Entity *newAmmo(Vec3D position)//creates object
 	ent->scale.x = 1.5;
 	ent->scale.y = 1.5;
 	ent->scale.z = 1.5;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
     //sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
     return ent;
@@ -327,7 +331,7 @@ Entity *newAmmo2(Vec3D position)//creates object
 	ent->scale.x = 1.5;
 	ent->scale.y = 1.5;
 	ent->scale.z = 1.5;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
     //sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
     return ent;
@@ -349,7 +353,7 @@ Entity *newAmmo3(Vec3D position)//creates object
 	ent->scale.x = 1.5;
 	ent->scale.y = 1.5;
 	ent->scale.z = 1.5;
-    cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
     //sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
     return ent;
@@ -1119,15 +1123,20 @@ void set_camera(Vec3D position, Vec3D rotation)
                  -position.z);
 }
 
-void hide_weapon(Entity* ent)//hide current weapon
-{
-	ent->hidden = 1;
-}
+//void hide_weapon(Entity* ent)//hide current weapon
+//{
+//	ent->hidden = 1;
+//}
 
 void track_player(Entity* ent) //chase player when in range
 {
 	/*if player gets in range*/
 	/*follow until player is dead or out of range*/
+}
+
+void score()
+{
+
 }
 
 /*eol@eof*/

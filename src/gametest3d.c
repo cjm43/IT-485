@@ -38,13 +38,16 @@ int bbon = 0;
 
 void touch_callback(void *data, void *context) //function for objects touching
 {
-    Entity *me,*other, *ammo, *health, *health2, *player, *drone;
+    Entity *ent,*me,*other, *ammo, *health, *health2, *player, *drone;
+	Space *space;
     Body *obody;
     if ((!data)||(!context))return;
+	ent = (Entity *)data;
     player = (Entity *)data;
 	drone = (Entity *)data;
     health = (Entity *)data;
 	health2 = (Entity *)data;
+	space = (Space *)data;
 	ammo = (Entity *)data;
 	//soldier1->body.velocity = vec3d(-soldier1->body.velocity.x,-soldier1->body.velocity.y,-soldier1->body.velocity.z);
 	//player->body.velocity = vec3d(-player->body.velocity.x,-player->body.velocity.y,-player->body.velocity.z);
@@ -52,15 +55,18 @@ void touch_callback(void *data, void *context) //function for objects touching
     if (entity_is_entity(obody->touch.data)) //if entites are touching
     {
         //ammo = (Entity *)obody->touch.data;
-		//player = (Entity *)me->touch.data;
+		player = (Entity *)obody->touch.data;
 		health = (Entity *)obody->touch.data;
 		health2 = (Entity *)obody->touch.data;
 		/*Health and ammo pickup disappear when touched*/
+		entity_free(player);
 		entity_free(ammo);
-		entity_free(health);
+		entity_free(health);  //removes entity model but not collision body
 		entity_free(health2);
-		//health->body.velocity = vec3d(-health->body.velocity.x,-health->body.velocity.y,-health->body.velocity.z);
-		//player->body.velocity.y = 0;
+		ent->destroy = 1;
+		//space_free(space);
+		//space_remove_body(space,&health->body);  //free body to remove collision
+
     }
     //slog("touching me.... touching youuuuuuuu");
 }
@@ -784,7 +790,7 @@ int main(int argc, char *argv[])
     int i;
     float r = 0;
     Space *space;
-    Entity *cube,*smoke,*player,*current_weapon,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3,*ammo4,*ammo5,*ammo6, *ammo7, *ammo8, *ammo9, *ammo10, *ammo11, *ammo12, *ammo13, *ammo14, *ammo15, *drone1, *drone2, *drone3, *drone4, *drone5;
+    Entity *ent,*cube,*smoke,*player,*current_weapon,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3,*ammo4,*ammo5,*ammo6, *ammo7, *ammo8, *ammo9, *ammo10, *ammo11, *ammo12, *ammo13, *ammo14, *ammo15, *drone1, *drone2, *drone3, *drone4, *drone5;
     char bGameLoopRunning = 1;
     
     SDL_Event e;
@@ -937,7 +943,7 @@ int main(int argc, char *argv[])
         {
             space_do_step(space);
         }
-		player->body.velocity=vec3d(0,0,0);
+		//player->body.velocity=vec3d(0,0,0);
         while ( SDL_PollEvent(&e) ) 
         {
             if (e.type == SDL_QUIT)
@@ -996,6 +1002,15 @@ int main(int argc, char *argv[])
                            .4*-cos(player->rotation.z * DEGTORAD),
                            .4*-sin(player->rotation.z * DEGTORAD),
                             0
+                        );
+                }
+				 else if (e.key.keysym.sym == SDLK_e)//move left
+                {
+                   
+					player->body.velocity = vec3d(
+                           0,
+                           0,
+                           0
                         );
                 }
                 else if (e.key.keysym.sym == SDLK_LEFT)
@@ -1109,9 +1124,17 @@ int main(int argc, char *argv[])
         glPopMatrix();
         /* drawing code above here! */
         graphics3d_next_frame();
+
     } 
     return 0;
 }
+
+void destroy_body(Entity *ent)  //destroy entity's body at the end of collision check
+		{
+			if(ent->destroy = 1){
+
+			}
+		}
 
 void set_camera(Vec3D position, Vec3D rotation)
 {
@@ -1134,6 +1157,7 @@ void track_player(Entity* ent) //chase player when in range
 	/*follow until player is dead or out of range*/
 }
 
+/*keep track of player score*/
 void score()
 {
 

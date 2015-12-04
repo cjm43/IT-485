@@ -64,6 +64,8 @@ Entity *entity_new()
             vec3d_set(__entity_list[i].scale,1,1,1);
 			__entity_list[i].hidden = 0;
             vec4d_set(__entity_list[i].color,1,1,1,1);
+			vec3d_set(__entity_list[i].scale,1,1,1);
+			__entity_list[i].destroy = 1;
             return &__entity_list[i];
         }
     }

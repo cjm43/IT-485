@@ -65,7 +65,7 @@ Entity *entity_new()
 			__entity_list[i].hidden = 0;
             vec4d_set(__entity_list[i].color,1,1,1,1);
 			vec3d_set(__entity_list[i].scale,1,1,1);
-			__entity_list[i].destroy = 1;
+			__entity_list[i].destroy = 0;
             return &__entity_list[i];
         }
     }
@@ -94,6 +94,8 @@ void entity_draw(Entity *ent)
     }
 	switch(ent->type)
 	{
+	case ENTITYTYPE_PLAYER: //player does not get drawn
+		break;
 	case ENTITYTYPE_PARTICLE:
 	   // particle_draw(ent->position, ent->scale, ent->texture, 16);
 		break;
@@ -118,6 +120,19 @@ int entity_is_entity(void *data)
     if ((Entity *)data < __entity_list)return 0;
     if ((Entity *)data >= (__entity_list + __entity_max))return 0;
     return 1;
+}
+
+void entity_cleanup()  //remove entities from game that are marked
+{
+	int i;
+	 for (i = 0;i < __entity_max;i++)
+    {
+        if (__entity_list[i].inuse //if entity is in use
+			&& __entity_list[i].destroy) //marked for destroy
+		{
+			entity_free(&__entity_list[i]);
+		}
+    } 
 }
 
 /*void drawBB(Entity *ent)

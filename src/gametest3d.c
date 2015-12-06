@@ -33,37 +33,39 @@ Entity *p1;  //create global entity with pointer to memory address of p1
 
 #define PI 3.14159265
 #define WEAPON_OFFSET .0625 //1 divided by 2(double it if going up)
+Space *space;
+Entity *player;
+Entity *drone;
 void set_camera(Vec3D position, Vec3D rotation);
 int bbon = 0;
 
 void touch_callback(void *data, void *context) //function for objects touching
 {
-    Entity *ent,*me,*other, *ammo, *health, *health2, *player, *drone;
-	Space *space;
+    Entity *ent,*me,*other, *ammo, *health, *health2, *drone;
+	//Space *space;
     Body *obody;
     if ((!data)||(!context))return;
 	ent = (Entity *)data;
-    player = (Entity *)data;
-	drone = (Entity *)data;
-    health = (Entity *)data;
-	health2 = (Entity *)data;
-	space = (Space *)data;
-	ammo = (Entity *)data;
 	//soldier1->body.velocity = vec3d(-soldier1->body.velocity.x,-soldier1->body.velocity.y,-soldier1->body.velocity.z);
 	//player->body.velocity = vec3d(-player->body.velocity.x,-player->body.velocity.y,-player->body.velocity.z);
     obody = (Body *)context;
     if (entity_is_entity(obody->touch.data)) //if entites are touching
     {
         //ammo = (Entity *)obody->touch.data;
-		player = (Entity *)obody->touch.data;
-		health = (Entity *)obody->touch.data;
-		health2 = (Entity *)obody->touch.data;
+		//player = (Entity *)obody->touch.data;
+		//health = (Entity *)obody->touch.data;
+		//health2 = (Entity *)obody->touch.data;
 		/*Health and ammo pickup disappear when touched*/
-		entity_free(player);
-		entity_free(ammo);
-		entity_free(health);  //removes entity model but not collision body
-		entity_free(health2);
-		ent->destroy = 1;
+		//slog("touch 1");
+		if(ent==player){   //if entity is player
+			space_remove_body(space, obody);  //remove body of other object
+			((Entity *)(obody->touch.data))->destroy=1; //setting obody as an entity and setting it to destroy
+			//slog("touch 2");
+		}
+		//entity_free(ammo);
+		//entity_free(health);  //removes entity model but not collision body
+		//entity_free(health2);
+		
 		//space_free(space);
 		//space_remove_body(space,&health->body);  //free body to remove collision
 
@@ -103,7 +105,11 @@ Entity *newCube(Vec3D position)//creates object
     {
         return NULL;
     }
-    ent->objModel = obj_load("models/cube.obj");
+    if((ent->objModel = obj_load("models/cube.obj"))==NULL)
+	{
+		entity_free(ent);
+		return NULL;
+	}
     ent->texture = LoadSprite("models/cube_text.png",1024,1024);
     vec3d_cpy(ent->body.position,position);
 	//ent->camera_independent = 1;
@@ -143,6 +149,7 @@ Entity *newPlayer(Vec3D position)//creates object
     cube_set(ent->body.bounds,-1,-1,-1,3,3,3);
 	sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
+	ent->type=ENTITYTYPE_PLAYER;
     return ent;
 }
 
@@ -747,7 +754,11 @@ Entity *newTurret1(Vec3D position, const char *name)//creates object
     {
         return NULL;
     }
-    ent->objModel = obj_load("models/turret.obj");
+    if((ent->objModel = obj_load("models/turret.obj"))==NULL)
+	{
+		entity_free(ent);
+		return NULL;
+	}
     //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
     vec3d_cpy(ent->body.position,position);
 	ent->rotation.x = 90;
@@ -769,7 +780,11 @@ Entity *newSoldier1(Vec3D position, const char *name)//creates object
     {
         return NULL;
     }
-    ent->objModel = obj_load("models/soldier.obj");
+    if((ent->objModel = obj_load("models/soldier.obj"))==NULL)
+	{
+		entity_free(ent);
+		return NULL;
+	}
     //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
     vec3d_cpy(ent->body.position,position);
 	//vec3d_cpy(ent->body.rotation,rotation);
@@ -789,8 +804,8 @@ int main(int argc, char *argv[])
 {
     int i;
     float r = 0;
-    Space *space;
-    Entity *ent,*cube,*smoke,*player,*current_weapon,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3,*ammo4,*ammo5,*ammo6, *ammo7, *ammo8, *ammo9, *ammo10, *ammo11, *ammo12, *ammo13, *ammo14, *ammo15, *drone1, *drone2, *drone3, *drone4, *drone5;
+    //Space *space;
+    Entity *ent,*cube,*smoke,*current_weapon,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3,*ammo4,*ammo5,*ammo6, *ammo7, *ammo8, *ammo9, *ammo10, *ammo11, *ammo12, *ammo13, *ammo14, *ammo15, *drone1, *drone2, *drone3, *drone4, *drone5;
     char bGameLoopRunning = 1;
     
     SDL_Event e;
@@ -1125,14 +1140,15 @@ int main(int argc, char *argv[])
         /* drawing code above here! */
         graphics3d_next_frame();
 
-    } 
+		entity_cleanup(); //function for clearing up entities
+   }
     return 0;
 }
 
-void destroy_body(Entity *ent)  //destroy entity's body at the end of collision check
+void destroy_body(Entity *ent, Space *space)  //destroy entity's body at the end of collision check
 		{
-			if(ent->destroy = 1){
-
+			if(ent->destroy = 1){  //if entity is destroyed
+				space_free(space); //remove space from game
 			}
 		}
 
@@ -1155,6 +1171,29 @@ void track_player(Entity* ent) //chase player when in range
 {
 	/*if player gets in range*/
 	/*follow until player is dead or out of range*/
+
+	Vec3D distance;         //distance for drone
+	Vec3D normalized;       //moves drone one step
+	float magnitude_squared;  //squared value of magnitude
+	float magnitude;        //square root of magnitude_squared; used to calculate 
+	float speed = 3;        //drone speed
+
+	distance.x = player->body.position.x - drone->body.position.x;  //player position minus drone position; calculation for drone moving to player
+	distance.y = player->body.position.y - drone->body.position.y;
+	distance.z = player->body.position.z - drone->body.position.z; 
+
+	magnitude_squared = pow (distance.x,2)+pow(distance.y,2)+pow(distance.z,2); //calculate magnitude_squared by squaring distance
+	
+    if(magnitude_squared<= 9)  //if drone's position minus player position squared is less than enemy range squared
+	{
+		magnitude = sqrt(magnitude_squared);    //magnitude is equal to square root of magnitude_squared
+		normalized.x = distance.x/(magnitude);  //distance divided by magnitude to find how many steps drone should move
+		normalized.y = distance.y/(magnitude);
+		normalized.z = distance.z/(magnitude);
+		drone->body.velocity.x = normalized.x * speed; //drone movement calculated by normalized value multiplied by speed
+		drone->body.velocity.x = normalized.y * speed;
+		drone->body.velocity.x = normalized.z * speed;
+	}
 }
 
 /*keep track of player score*/

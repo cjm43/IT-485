@@ -6,7 +6,7 @@
 #include "sprite.h"
 #include "Collision.h"
 #include "body.h"
-#define ENTITYTYPE_PLAYER 0
+#define ENTITYTYPE_PLAYER 9
 #define ENTITYTYPE_ENEMY 1
 #define ENTITYTYPE_OBJECT 2
 #define ENTITYTYPE_PARTICLE 3
@@ -61,5 +61,7 @@ void entity_draw(Entity *ent);
 void entity_free(Entity *ent);
 
 int entity_is_entity(void *data);
+
+void entity_cleanup();
 
 #endif

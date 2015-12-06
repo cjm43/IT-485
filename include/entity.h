@@ -31,6 +31,7 @@ typedef struct Entity_S
 	Uint8 hidden; //hide entity
 	Uint8 destroy; //destroy body
 	MglCallback think;
+	int next_think;
 }Entity;
 
 /**

@@ -36,6 +36,7 @@ Entity *p1;  //create global entity with pointer to memory address of p1
 Space *space;
 Entity *player;
 Entity *drone;
+void track_player(Entity* ent);
 void set_camera(Vec3D position, Vec3D rotation);
 int bbon = 0;
 
@@ -76,13 +77,12 @@ void touch_callback(void *data, void *context) //function for objects touching
 void think_callback(void *data, void *context)
 {
 	Entity *ent;
-	//Space *space;
     Body *obody;
-    if ((!data)||(!context))return;
+    if ((!data))return;
 	ent = (Entity *)data;
 
 	track_player(ent);
-	ent->next_think = 4000;
+	ent->next_think = 1000;
 
 }
 
@@ -887,11 +887,11 @@ int main(int argc, char *argv[])
 	ammo14 = newAmmo(vec3d(10,-20,-5)); 
 	ammo15 = newAmmo(vec3d(40,-80,-5)); 
 
-	drone1 = newDrone(vec3d(50,-60,-5),"drone"); //+forward/-back, -left/+right, +up/-down
-	drone2 = newDrone2(vec3d(-100,-100,-5),"drone");
-	drone3 = newDrone3(vec3d(-90,-20,-5),"drone");
-    drone4 = newDrone4(vec3d(-90,0,-5),"drone");
-	drone4 = newDrone4(vec3d(-10,90,-5),"drone");
+	drone1 = newDrone(vec3d(50,-60,-5),"drone1"); //+forward/-back, -left/+right, +up/-down
+	drone2 = newDrone(vec3d(-100,-100,-5),"drone2");
+	drone3 = newDrone(vec3d(-90,-20,-5),"drone3");
+    drone4 = newDrone(vec3d(-90,0,-5),"drone4");
+	drone5 = newDrone(vec3d(-10,90,-5),"drone5");
 
     //turret1 = newTurret1(vec3d(-10,90,-3),"turret");
 	/*turret2 = newTurret2(vec3d(135,100,-9.3),"turret");
@@ -947,6 +947,12 @@ int main(int argc, char *argv[])
 	space_add_body(space,&ammo13->body);
 	space_add_body(space,&ammo14->body);
 	space_add_body(space,&ammo15->body);
+
+	space_add_body(space,&drone1->body);
+	space_add_body(space,&drone2->body);
+	space_add_body(space,&drone3->body);
+	space_add_body(space,&drone4->body);
+	space_add_body(space,&drone5->body);
 
 	/*space_add_body(space,&drone1->body);
 	space_add_body(space,&drone2->body);
@@ -1187,7 +1193,7 @@ void set_camera(Vec3D position, Vec3D rotation)
 //	ent->hidden = 1;
 //}
 
-void track_player(Entity* ent) //chase player when in range
+void track_player(Entity* drone) //chase player when in range
 {
 	/*if player gets in range*/
 	/*follow until player is dead or out of range*/
@@ -1196,7 +1202,7 @@ void track_player(Entity* ent) //chase player when in range
 	Vec3D normalized;       //moves drone one step
 	float magnitude_squared;  //squared value of magnitude
 	float magnitude;        //square root of magnitude_squared; used to calculate 
-	float speed = 3;        //drone speed
+	float speed = 1;        //drone speed
 
 	distance.x = player->body.position.x - drone->body.position.x;  //player position minus drone position; calculation for drone moving to player
 	distance.y = player->body.position.y - drone->body.position.y;
@@ -1204,15 +1210,15 @@ void track_player(Entity* ent) //chase player when in range
 
 	magnitude_squared = pow (distance.x,2)+pow(distance.y,2)+pow(distance.z,2); //calculate magnitude_squared by squaring distance
 	
-    if(magnitude_squared<= 9)  //if drone's position minus player position squared is less than enemy range squared
+    if(magnitude_squared<= 9000)  //if drone's position minus player position squared is less than enemy range squared
 	{
 		magnitude = sqrt(magnitude_squared);    //magnitude is equal to square root of magnitude_squared
 		normalized.x = distance.x/(magnitude);  //distance divided by magnitude to find how many steps drone should move
 		normalized.y = distance.y/(magnitude);
 		normalized.z = distance.z/(magnitude);
-		drone->body.velocity.x = normalized.x * speed; //drone movement calculated by normalized value multiplied by speed
-		drone->body.velocity.x = normalized.y * speed;
-		drone->body.velocity.x = normalized.z * speed;
+		drone->body.velocity = vec3d(normalized.x * speed, //drone movement calculated by normalized value multiplied by speed
+									normalized.y * speed,
+									normalized.z * speed);
 	}
 }
 

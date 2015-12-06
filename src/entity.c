@@ -135,7 +135,21 @@ void entity_cleanup()  //remove entities from game that are marked
     } 
 }
 
-
+void entity_think(int time)  //all entities check to see if they should think
+{
+	int i;
+	 for (i = 0;i < __entity_max;i++)
+    {
+        if (__entity_list[i].inuse //if entity is in use
+			&& __entity_list[i].think.function != NULL) //can think
+		{
+			if((__entity_list[i].next_think -= time) <= 0) //if it is time to think again
+			{
+				__entity_list[i].think.function(&__entity_list[i], NULL);
+			}
+		}
+    } 
+}
 
 /*void drawBB(Entity *ent)
 {

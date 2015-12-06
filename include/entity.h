@@ -30,6 +30,7 @@ typedef struct Entity_S
 	Uint8 camera_independent; //create objects that are not dependent on camera
 	Uint8 hidden; //hide entity
 	Uint8 destroy; //destroy body
+	MglCallback think;
 }Entity;
 
 /**

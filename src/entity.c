@@ -135,6 +135,8 @@ void entity_cleanup()  //remove entities from game that are marked
     } 
 }
 
+
+
 /*void drawBB(Entity *ent)
 {
 	int tris[36] = 

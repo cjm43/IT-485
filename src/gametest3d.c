@@ -73,6 +73,19 @@ void touch_callback(void *data, void *context) //function for objects touching
     //slog("touching me.... touching youuuuuuuu");
 }
 
+void think_callback(void *data, void *context)
+{
+	Entity *ent;
+	//Space *space;
+    Body *obody;
+    if ((!data)||(!context))return;
+	ent = (Entity *)data;
+
+	track_player(ent);
+	ent->next_think = 4000;
+
+}
+
 //Entity *newSmoke(Vec3D position)//creates object
 //{
 //    Entity * ent;
@@ -655,6 +668,8 @@ Entity *newDrone(Vec3D position, const char *name)//creates object
     cube_set(ent->body.bounds,-1,-1,-1,2,2,2);
     sprintf(ent->name,"%s",name);
     mgl_callback_set(&ent->body.touch,touch_callback,ent);
+	mgl_callback_set(&ent->think,think_callback,ent);
+	ent->next_think = 4000;
     return ent;
 }
 
@@ -803,6 +818,8 @@ Entity *newSoldier1(Vec3D position, const char *name)//creates object
 int main(int argc, char *argv[])
 {
     int i;
+	int current_time = 0;
+	int last_time = 0;
     float r = 0;
     //Space *space;
     Entity *ent,*cube,*smoke,*current_weapon,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3,*ammo4,*ammo5,*ammo6, *ammo7, *ammo8, *ammo9, *ammo10, *ammo11, *ammo12, *ammo13, *ammo14, *ammo15, *drone1, *drone2, *drone3, *drone4, *drone5;
@@ -954,6 +971,8 @@ int main(int argc, char *argv[])
 
     while (bGameLoopRunning)
     {
+		last_time = current_time;  //last time is equal to current time
+		current_time = SDL_GetTicks(); //get new current time
         for (i = 0; i < 100;i++)
         {
             space_do_step(space);
@@ -1141,6 +1160,7 @@ int main(int argc, char *argv[])
         graphics3d_next_frame();
 
 		entity_cleanup(); //function for clearing up entities
+		entity_think(current_time-last_time);  //check how long it has been since the last time time was checked
    }
     return 0;
 }

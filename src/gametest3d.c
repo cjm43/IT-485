@@ -82,7 +82,7 @@ void think_callback(void *data, void *context)
 	ent = (Entity *)data;
 
 	track_player(ent);
-	ent->next_think = 1000;
+	ent->next_think = 1000; //entity will think every thousandths of a seconde
 
 }
 
@@ -1223,9 +1223,11 @@ void track_player(Entity* drone) //chase player when in range
 }
 
 /*keep track of player score*/
-void score()
+void track_score()
 {
-
+	/*assign cube a point value*/
+	/*when player touches cube add value to score tracker*/
+	/*display score to screen*/
 }
 
 /*eol@eof*/

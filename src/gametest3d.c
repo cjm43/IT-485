@@ -39,6 +39,150 @@ Entity *drone;
 void track_player(Entity* ent);
 void set_camera(Vec3D position, Vec3D rotation);
 int bbon = 0;
+Sprite *score_text;
+
+void drawUI(Sprite *score_text){
+
+	Vec2D uVs[4];
+	Vec3D verts[4];
+	
+	/*set position of score window*/
+	verts[0].x=-1;
+	verts[0].y=1;
+	verts[0].z=1;
+
+	verts[1].x=-1;
+	verts[1].y=0.66f;
+	verts[1].z=1;
+
+	verts[2].x=-0.5f;
+	verts[2].y=1;
+	verts[2].z=1;
+
+	verts[3].x=-0.5f;
+	verts[3].y=0.66f;
+	verts[3].z=1;
+
+	/*set size of image window*/
+	uVs[0].x=0;
+	uVs[0].y=0;
+
+	uVs[1].x=0;
+	uVs[1].y=1;
+
+	uVs[2].x=1;
+	uVs[2].y=0;
+
+	uVs[3].x=1;
+	uVs[3].y=1;
+
+	glMatrixMode(GL_PROJECTION);
+
+    glPushMatrix(); //push down the matrix stack, inherits properties from parent, setup matrix for transform,scale,rotate
+	glLoadIdentity();
+    gluOrtho2D(-1,1,-1,1); //postion of window
+    glEnable(GL_BLEND);
+    glColorMaterial(GL_FRONT,GL_DIFFUSE);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D,score_text->texture);
+	glEnable(GL_COLOR_MATERIAL);
+	glDisable(GL_DEPTH_TEST);
+	glMatrixMode(GL_MODELVIEW);
+
+	glPushMatrix();
+   
+    glBegin(GL_TRIANGLES); //start giving opengl triangle geometry
+
+	/*draw window to screen*/
+	glTexCoord2f(uVs[0].x,uVs[0].y);
+	glVertex3f(verts[0].x,verts[0].y,verts[0].z);
+
+	glTexCoord2f(uVs[1].x,uVs[1].y);
+	glVertex3f(verts[1].x,verts[1].y,verts[1].z);
+
+	glTexCoord2f(uVs[2].x,uVs[2].y);
+	glVertex3f(verts[2].x,verts[2].y,verts[2].z);
+
+	glTexCoord2f(uVs[2].x,uVs[2].y);
+	glVertex3f(verts[2].x,verts[2].y,verts[2].z);
+
+	glTexCoord2f(uVs[1].x,uVs[1].y);
+	glVertex3f(verts[1].x,verts[1].y,verts[1].z);
+
+	glTexCoord2f(uVs[3].x,uVs[3].y);
+	glVertex3f(verts[3].x,verts[3].y,verts[3].z);
+
+//	Vec3D verts[4];
+
+	/*verts[0].x = 0;
+	verts[0].y = 0;
+	verts[0].z = 0.1;
+
+	verts[1].x = 1;
+	verts[1].y = 0;
+	verts[1].z = 0.1;
+
+	verts[2].x = 0;
+	verts[2].y = 1;
+	verts[2].z = 0.1;
+
+	verts[3].x = 1;
+	verts[3].y = 1;
+	verts[3].z = 0.1;*/
+
+//	Vec2D texels[4];
+
+	//texels[0].x = 0;
+	//texels[0].y = 0;
+
+	//texels[1].x = 1;
+	//texels[1].y = 0;
+
+	//texels[2].x = 0;
+	//texels[2].y = 1;
+
+	//texels[3].x = 1;
+	//texels[3].y = 1;
+
+
+	   /* glVertex3f(
+            obj->vertex_array[triangle->p[0].v * 3],
+            obj->vertex_array[triangle->p[0].v * 3 + 1],
+            obj->vertex_array[triangle->p[0].v * 3 + 2]
+        );
+
+		glVertex3f(
+			obj->vertex_array[triangle->p[0].v * 3],
+            obj->vertex_array[triangle->p[0].v * 3 + 1],
+            obj->vertex_array[triangle->p[0].v * 3 + 2]
+		);
+
+       glTexCoord3f(
+                obj->texel_array[triangle->p[2].t * 2],
+                obj->texel_array[triangle->p[2].t * 2 + 1],
+	            obj->texel_array[triangle->p[2].t * 2 + 2]
+       );
+
+	   glTexCoord3f(
+                obj->texel_array[triangle->p[2].t * 2],
+                obj->texel_array[triangle->p[2].t * 2 + 1],
+				obj->texel_array[triangle->p[2].t * 2 + 2]
+       );*/
+    
+  
+    glEnd(); //finish giving geometry
+    
+    glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D);
+    glPopMatrix(); //everything is only dealt within this object, 
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_MODELVIEW);
+
+}
 
 void touch_callback(void *data, void *context) //function for objects touching
 {
@@ -57,11 +201,12 @@ void touch_callback(void *data, void *context) //function for objects touching
 		//health = (Entity *)obody->touch.data;
 		//health2 = (Entity *)obody->touch.data;
 		/*Health and ammo pickup disappear when touched*/
-		//slog("touch 1");
+		
 		if(ent==player){   //if entity is player
 			space_remove_body(space, obody);  //remove body of other object
 			((Entity *)(obody->touch.data))->destroy=1; //setting obody as an entity and setting it to destroy
-			//slog("touch 2");
+			
+			
 		}
 		//entity_free(ammo);
 		//entity_free(health);  //removes entity model but not collision body
@@ -298,6 +443,1260 @@ Entity *newHealth2(Vec3D position)//creates object
 }
 
 Entity *newHealth3(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth4(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth5(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth6(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth7(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth8(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth9(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth10(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth11(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth12(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth13(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth14(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth15(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth16(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth17(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth18(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth19(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth20(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth21(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth22(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth23(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth24(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth25(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth26(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth27(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth28(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth29(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth30(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth31(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth32(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth33(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth34(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth35(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth36(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth37(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth38(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth39(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth40(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth41(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth42(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth43(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth44(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth45(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth46(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth47(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth48(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth49(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth50(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth51(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth52(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth53(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth54(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth55(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth56(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth57(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth58(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth59(Vec3D position)//creates object
+{
+    Entity * ent;
+    ent = entity_new();
+    if (!ent)
+    {
+        return NULL;
+    }
+    ent->objModel = obj_load("models/health.obj");
+    //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
+    vec3d_cpy(ent->body.position,position);
+	ent->rotation.x = 90;
+	ent->rotation.y = 0;ent->scale.x = 1.3;
+	ent->scale.x = 1.5;
+	ent->scale.y = 1.5;
+	ent->scale.z = 1.5;
+    cube_set(ent->body.bounds,1,1,3,4,4,4);
+    //sprintf(ent->name,"%s",name);
+    mgl_callback_set(&ent->body.touch,touch_callback,ent);
+    return ent;
+}
+
+Entity *newHealth60(Vec3D position)//creates object
 {
     Entity * ent;
     ent = entity_new();
@@ -795,9 +2194,9 @@ Entity *newSoldier1(Vec3D position, const char *name)//creates object
     {
         return NULL;
     }
-    if((ent->objModel = obj_load("models/soldier.obj"))==NULL)
+    if((ent->objModel = obj_load("models/soldier.obj"))==NULL) //if there is no object model to load
 	{
-		entity_free(ent);
+		entity_free(ent);  //free up the entity
 		return NULL;
 	}
     //ent->texture = LoadSprite("models/cube_text.png",1024,1024);
@@ -822,7 +2221,7 @@ int main(int argc, char *argv[])
 	int last_time = 0;
     float r = 0;
     //Space *space;
-    Entity *ent,*cube,*smoke,*current_weapon,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *ammo, *ammo2, *ammo3,*ammo4,*ammo5,*ammo6, *ammo7, *ammo8, *ammo9, *ammo10, *ammo11, *ammo12, *ammo13, *ammo14, *ammo15, *drone1, *drone2, *drone3, *drone4, *drone5;
+    Entity *ent,*cube,*current_weapon,*assault,*assault2, *pistol, *shotgun, *smg, *health, *health2, *health3, *health4, *health5, *health6, *health7, *health8, *health9, *health10, *health11, *health12, *health13, *health14, *health15, *health16, *health17, *health18, *health19, *health20, *health21, *health22, *health23, *health24, *health25, *health26, *health27, *health28, *health29, *health30, *health31, *health32, *health33, *health34, *health35, *health36, *health37, *health38, *health39, *health40, *health41, *health42, *health43, *health44, *health45, *health46, *health47, *health48, *health49, *health50, *health51, *health52, *health53, *health54, *health55, *health56, *health57, *health58, *health59, *health60, *ammo, *ammo2, *ammo3,*ammo4,*ammo5,*ammo6, *ammo7, *ammo8, *ammo9, *ammo10, *ammo11, *ammo12, *ammo13, *ammo14, *ammo15, *drone1, *drone2, *drone3, *drone4, *drone5;
     char bGameLoopRunning = 1;
     
     SDL_Event e;
@@ -840,9 +2239,11 @@ int main(int argc, char *argv[])
 
 	//obj = obj_load("models/cube.obj");
 	//texture = LoadSprite("models/cube_text.png",1024,1024);
-    
+
     bgobj = obj_load("models/maze.obj");
     bgtext = LoadSprite("models/Solid_blue.png",1024,1024);
+
+	score_text = LoadSprite("models/numbers.png",640,97);
 
 	player = newPlayer(vec3d(100,-110,0.1));
 	player->body.position = vec3d(100,-110,0.1); //set initial camera position
@@ -867,9 +2268,74 @@ int main(int argc, char *argv[])
 	smg->hidden = 1;*/
 	
 
-	health = newHealth(vec3d(100,-90,-4));
+	health = newHealth(vec3d(100,-90,-4));//(forward/back,left/right,up/down)
 	health2 = newHealth(vec3d(100,-80,-4));
 	health3 = newHealth(vec3d(100,-70,-4));
+
+    health4 = newHealth(vec3d(0,-20,-4));
+	health5 = newHealth(vec3d(-10,-20,-4));
+	health6 = newHealth(vec3d(-20,-20,-4));
+	health7 = newHealth(vec3d(-30,-20,-4));
+	health8 = newHealth(vec3d(-40,-20,-4));
+	health9 = newHealth(vec3d(-50,-20,-4));
+    health10 = newHealth(vec3d(-60,-20,-4));
+	health11 = newHealth(vec3d(-70,-20,-4));
+	health12 = newHealth(vec3d(-80,-20,-4));
+
+	health13 = newHealth(vec3d(-10,0,-4));
+	health14 = newHealth(vec3d(-20,0,-4));
+	health15 = newHealth(vec3d(-30,0,-4));
+	health16 = newHealth(vec3d(-40,0,-4));
+    health17 = newHealth(vec3d(-50,0,-4));
+	health18 = newHealth(vec3d(-60,0,-4));
+	health19 = newHealth(vec3d(-70,0,-4));
+
+	health20 = newHealth(vec3d(-30,-40,-4));
+	health21 = newHealth(vec3d(-30,-50,-4));
+	health22 = newHealth(vec3d(-30,-60,-4));
+    health23 = newHealth(vec3d(-30,-70,-4));
+	health24 = newHealth(vec3d(-30,-80,-4));
+
+	health25 = newHealth(vec3d(-5,0,-4));
+	health26 = newHealth(vec3d(-5,10,-4));
+	health27 = newHealth(vec3d(-5,20,-4));
+	health28 = newHealth(vec3d(-5,30,-4));
+    health29 = newHealth(vec3d(-5,40,-4));
+	health30 = newHealth(vec3d(-5,50,-4));
+
+	health31 = newHealth(vec3d(-10,40,-4));
+	health32 = newHealth(vec3d(-20,40,-4));
+	health33 = newHealth(vec3d(-30,40,-4));
+	health34 = newHealth(vec3d(-40,40,-4));
+    health35 = newHealth(vec3d(-50,40,-4));
+	health36 = newHealth(vec3d(-60,40,-4));
+	health37 = newHealth(vec3d(50,40,-4));
+	health38 = newHealth(vec3d(40,40,-4));
+	health39 = newHealth(vec3d(30,40,-4));
+	health40 = newHealth(vec3d(20,40,-4));
+	health41 = newHealth(vec3d(10,40,-4));
+
+	health42 = newHealth(vec3d(40,20,-4));
+	health43 = newHealth(vec3d(30,20,-4));
+	health44 = newHealth(vec3d(20,20,-4));
+	health45 = newHealth(vec3d(10,20,-4));
+	health46 = newHealth(vec3d(50,20,-4));
+	health47 = newHealth(vec3d(60,20,-4));
+	health48 = newHealth(vec3d(70,20,-4));
+	health49 = newHealth(vec3d(80,20,-4));
+	health50 = newHealth(vec3d(90,20,-4));
+
+	health51 = newHealth(vec3d(-40,-60,-4));
+	health52 = newHealth(vec3d(-50,-60,-4));
+	health53 = newHealth(vec3d(-60,-60,-4));
+	health54 = newHealth(vec3d(-70,-60,-4));
+	health55 = newHealth(vec3d(-80,-60,-4));
+
+	health56 = newHealth(vec3d(-40,-105,-4));
+	health57 = newHealth(vec3d(-50,-105,-4));
+	health58 = newHealth(vec3d(-60,-105,-4));
+	health59 = newHealth(vec3d(-70,-105,-4));
+	health60 = newHealth(vec3d(-80,-105,-4));
 
 	ammo = newAmmo(vec3d(100,-60,-5));    
 	ammo2 = newAmmo(vec3d(100,-50,-5));  
@@ -931,6 +2397,63 @@ int main(int argc, char *argv[])
 	space_add_body(space,&health->body);
 	space_add_body(space,&health2->body);
 	space_add_body(space,&health3->body);
+	space_add_body(space,&health4->body);
+    space_add_body(space,&health5->body);
+	space_add_body(space,&health6->body);
+    space_add_body(space,&health7->body);
+	space_add_body(space,&health8->body);
+	space_add_body(space,&health9->body);
+	space_add_body(space,&health10->body);
+    space_add_body(space,&health11->body);
+	space_add_body(space,&health12->body);
+	space_add_body(space,&health13->body);
+	space_add_body(space,&health14->body);
+	space_add_body(space,&health15->body);
+	space_add_body(space,&health16->body);
+    space_add_body(space,&health17->body);
+	space_add_body(space,&health18->body);
+	space_add_body(space,&health19->body);
+	space_add_body(space,&health20->body);
+	space_add_body(space,&health21->body);
+	space_add_body(space,&health22->body);
+    space_add_body(space,&health23->body);
+	space_add_body(space,&health24->body);
+	space_add_body(space,&health25->body);
+	space_add_body(space,&health26->body);
+	space_add_body(space,&health27->body);
+	space_add_body(space,&health28->body);
+    space_add_body(space,&health29->body);
+	space_add_body(space,&health30->body);
+	space_add_body(space,&health31->body);
+	space_add_body(space,&health32->body);
+	space_add_body(space,&health33->body);
+	space_add_body(space,&health34->body);
+    space_add_body(space,&health35->body);
+	space_add_body(space,&health36->body);
+	space_add_body(space,&health37->body);
+	space_add_body(space,&health38->body);
+	space_add_body(space,&health39->body);
+	space_add_body(space,&health40->body);
+    space_add_body(space,&health41->body);
+	space_add_body(space,&health42->body);
+	space_add_body(space,&health43->body);
+	space_add_body(space,&health44->body);
+	space_add_body(space,&health45->body);
+	space_add_body(space,&health46->body);
+    space_add_body(space,&health47->body);
+	space_add_body(space,&health48->body);
+	space_add_body(space,&health49->body);
+	space_add_body(space,&health50->body);
+	space_add_body(space,&health51->body);
+	space_add_body(space,&health52->body);
+    space_add_body(space,&health53->body);
+	space_add_body(space,&health54->body);
+	space_add_body(space,&health55->body);
+	space_add_body(space,&health56->body);
+	space_add_body(space,&health57->body);
+	space_add_body(space,&health58->body);
+    space_add_body(space,&health59->body);
+	space_add_body(space,&health60->body);
 
 	space_add_body(space,&ammo->body);
 	space_add_body(space,&ammo2->body);
@@ -1012,8 +2535,8 @@ int main(int argc, char *argv[])
                 {
                     
                        player->body.velocity = vec3d(          //move player based on velocity
-                            .4*-sin(player->rotation.z * DEGTORAD),
-                            .4*cos(player->rotation.z * DEGTORAD),
+                            .8*-sin(player->rotation.z * DEGTORAD),
+                            .8*cos(player->rotation.z * DEGTORAD),
                             0
                         );
                 }
@@ -1021,8 +2544,8 @@ int main(int argc, char *argv[])
                 {
                    
                    player->body.velocity = vec3d(
-                            .4*sin(player->rotation.z * DEGTORAD),
-                            .4*-cos(player->rotation.z * DEGTORAD),
+                            .8*sin(player->rotation.z * DEGTORAD),
+                            .8*-cos(player->rotation.z * DEGTORAD),
                             0
                         );
                 }
@@ -1030,8 +2553,8 @@ int main(int argc, char *argv[])
                 {
                     
 					player->body.velocity = vec3d(
-                            .4*cos(player->rotation.z * DEGTORAD),
-                            .4*sin(player->rotation.z * DEGTORAD),
+                            .8*cos(player->rotation.z * DEGTORAD),
+                            .8*sin(player->rotation.z * DEGTORAD),
                             0
                         );
                 }
@@ -1039,8 +2562,8 @@ int main(int argc, char *argv[])
                 {
                    
 					player->body.velocity = vec3d(
-                           .4*-cos(player->rotation.z * DEGTORAD),
-                           .4*-sin(player->rotation.z * DEGTORAD),
+                           .8*-cos(player->rotation.z * DEGTORAD),
+                           .8*-sin(player->rotation.z * DEGTORAD),
                             0
                         );
                 }
@@ -1145,11 +2668,14 @@ int main(int argc, char *argv[])
 
 		entity_draw_all(0); //draw entities not depedent on camera weapons(enemies,level)
 
+		drawUI(score_text);
+
 		set_camera(
 			player->body.position,
-            player->rotation );
+            player->rotation);
         
         entity_draw_all(1);  //draw entities dependent on camera (gun,projectile)
+		
 
 		 obj_draw(
             bgobj,
@@ -1188,6 +2714,8 @@ void set_camera(Vec3D position, Vec3D rotation)
                  -position.z);
 }
 
+
+
 //void hide_weapon(Entity* ent)//hide current weapon
 //{
 //	ent->hidden = 1;
@@ -1202,7 +2730,7 @@ void track_player(Entity* drone) //chase player when in range
 	Vec3D normalized;       //moves drone one step
 	float magnitude_squared;  //squared value of magnitude
 	float magnitude;        //square root of magnitude_squared; used to calculate 
-	float speed = 1;        //drone speed
+	float speed = 0.4;        //drone speed
 
 	distance.x = player->body.position.x - drone->body.position.x;  //player position minus drone position; calculation for drone moving to player
 	distance.y = player->body.position.y - drone->body.position.y;
@@ -1223,11 +2751,17 @@ void track_player(Entity* drone) //chase player when in range
 }
 
 /*keep track of player score*/
-void track_score()
+void track_score(Entity *health)
 {
+	int score = 1;
 	/*assign cube a point value*/
 	/*when player touches cube add value to score tracker*/
 	/*display score to screen*/
+
+	slog("score:" , track_score);
+
+	/*feed values of number sheet for opengl to calculate which digit to show on screen*/
+
 }
 
 /*eol@eof*/

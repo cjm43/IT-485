@@ -15,7 +15,7 @@ struct Space_S
     float stepFactor;
 };
 
-Space *space_new()
+Space *space_new()   //create new space
 {
     Space *space;
     space = (Space *)calloc(1,sizeof(struct Space_S));
@@ -34,14 +34,14 @@ void space_set_steps(Space *space,int steps)
     space->stepFactor = 1.0/steps;
 }
 
-void space_remove_body(Space *space,Body *body)
+void space_remove_body(Space *space,Body *body) //remove body from space
 {
     if (!space)return;
     if (!body)return;
     space->bodylist = g_list_remove(space->bodylist,body);
 }
 
-void space_add_body(Space *space,Body *body)
+void space_add_body(Space *space,Body *body)  //add body to space
 {
     if (!space)return;
     if (!body)return;

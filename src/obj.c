@@ -524,6 +524,116 @@ void obj_draw(
     glPopMatrix(); //everything is only dealt within this object, 
 }
 
+//void obj_draw_text(
+//    Obj *obj,
+//    Vec3D position,
+//    Vec3D scale,
+//    Vec4D color,
+//    Sprite *texture
+//    )
+//{
+//    int i;
+//    ObjTriangle* triangle;
+//    float trans[4];
+//    
+//    glPushMatrix(); //push down the matrix stack, inherits properties from parent, setup matrix for transform,scale,rotate
+//
+//    glEnable(GL_LIGHTING);
+//    glEnable(GL_BLEND);
+//    glEnable(GL_NORMALIZE);
+//    glColorMaterial(GL_FRONT,GL_DIFFUSE);
+//    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+//    if(texture != NULL)
+//    {
+//        glEnable(GL_TEXTURE_2D);//enable texture
+//        glBindTexture(GL_TEXTURE_2D,texture->texture);//bind texture, enable and use specific texture
+//    }
+//    
+//    glEnable(GL_COLOR_MATERIAL);
+//   // glMaterialfv(GL_FRONT,GL_DIFFUSE,trans);
+//    //glDepthFunc(GL_LEQUAL);
+//    
+//    glTranslatef(position.x,position.y,position.z);
+//    //glRotatef(rotation.x, 1.0f, 0.0f, 0.0f);
+//   // glRotatef(rotation.y, 0.0f, 1.0f, 0.0f);
+//   // glRotatef(rotation.z, 0.0f, 0.0f, 1.0f);
+//    glScalef(scale.x,scale.y,scale.z);
+//    
+//    glColor3f(color.x,color.y,color.z);
+//    glBegin(GL_QUADS); //start giving opengl quad geometry
+//
+//	Vec3D verts[4];
+//
+//	verts[0].x = 0;
+//	verts[0].y = 0;
+//	verts[0].z = 0.1;
+//
+//	verts[1].x = 1;
+//	verts[1].y = 0;
+//	verts[1].z = 0.1;
+//
+//	verts[2].x = 0;
+//	verts[2].y = 1;
+//	verts[2].z = 0.1;
+//
+//	verts[3].x = 1;
+//	verts[3].y = 1;
+//	verts[3].z = 0.1;
+//
+//	Vec2D texels[4];
+//
+//	texels[0].x = 0;
+//	texels[0].y = 0;
+//
+//	texels[1].x = 1;
+//	texels[1].y = 0;
+//
+//	texels[2].x = 0;
+//	texels[2].y = 1;
+//
+//	texels[3].x = 1;
+//	texels[3].y = 1;
+//
+//
+//	    glVertex3f(
+//            obj->vertex_array[triangle->p[0].v * 3],
+//            obj->vertex_array[triangle->p[0].v * 3 + 1],
+//            obj->vertex_array[triangle->p[0].v * 3 + 2]
+//        );
+//
+//		glVertex3f(
+//			obj->vertex_array[triangle->p[0].v * 3],
+//            obj->vertex_array[triangle->p[0].v * 3 + 1],
+//            obj->vertex_array[triangle->p[0].v * 3 + 2]
+//		);
+//
+//       glTexCoord3f(
+//                obj->texel_array[triangle->p[2].t * 2],
+//                obj->texel_array[triangle->p[2].t * 2 + 1],
+//	            obj->texel_array[triangle->p[2].t * 2 + 2]
+//       );
+//
+//	   glTexCoord3f(
+//                obj->texel_array[triangle->p[2].t * 2],
+//                obj->texel_array[triangle->p[2].t * 2 + 1],
+//				obj->texel_array[triangle->p[2].t * 2 + 2]
+//       );
+//    
+//  
+//    glEnd(); //finish giving geometry
+//    
+//    glColor4f(1,1,1,1);
+//    glDisable(GL_LIGHTING);
+//    glDisable(GL_BLEND);
+//    glDisable(GL_COLOR_MATERIAL);
+//	glDisable(GL_DEPTH_TEST);
+//    if(texture != NULL)
+//    {
+//        glDisable(GL_TEXTURE_2D);
+//    }    
+//    glPopMatrix(); //everything is only dealt within this object, 
+//}
+
 Model *obj_load_model(char *filename)
 {
     Model *model;

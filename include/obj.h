@@ -93,5 +93,14 @@ void obj_draw(
     Sprite *texture
 );
 
+void obj_draw_text(
+	Obj *obj,
+    Vec3D position,
+    Vec3D scale,
+    Vec4D color,
+    Sprite *texture
+
+);
+
 
 #endif
